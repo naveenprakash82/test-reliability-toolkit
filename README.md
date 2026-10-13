@@ -6,7 +6,7 @@ The project helps answer two practical questions:
 - Which tests have shown inconsistent results across repeated runs?
 - Which tests may deserve attention when a particular application component changes?
 
-It supports a simple JSON test-history format and limited conversions from Jest and Playwright JSON reports. The original WebdriverIO browser tests remain as runnable examples.
+It supports a simple JSON test-history format and limited conversions from Jest and Playwright JSON reports. WebdriverIO browser tests include login and a synthetic shopping-cart/checkout workflow.
 
 > **Status:** Experimental engineering examples. The dependency-based score is a transparent heuristic, not a validated prediction of failure. No independent adoption or performance improvement has been established.
 
@@ -25,6 +25,12 @@ npm run analyze -- examples/sample-runs.json
 This command reads local synthetic results and prints a JSON summary of passes, failures, skipped executions, failure rates, duration coverage and mixed outcomes.
 
 **[See sample output and interpretation](docs/EXAMPLE_OUTPUT.md)**
+
+## Synthetic store and API contract checks
+
+Browser automation includes a local shopping-cart scenario: add products, calculate totals, remove items, and complete a sample checkout. No real payments or external services are involved.
+
+A separate consumer-side order contract validator checks required fields and compatible status values. It demonstrates how an additive field can remain compatible while changes to identifiers, item quantities or supported statuses can break a consumer. Run `npm run test:unit` to exercise the contract regressions.
 
 ## Prioritize investigations after a change
 
@@ -72,6 +78,8 @@ The browser tests use a local generated sign-in page and do not require any exte
 | [priorityFromDependencies.js](src/reliability/priorityFromDependencies.js) | Dependency-aware investigation ordering |
 | [playwrightJsonAdapter.js](src/reliability/playwrightJsonAdapter.js) | Convert selected Playwright JSON test results |
 | [jestJsonAdapter.js](src/reliability/jestJsonAdapter.js) | Convert selected Jest JSON assertion results |
+| [Order contract validator](src/contracts/orderContract.js) | Validate a synthetic consumer response contract |
+| [Checkout browser tests](test/specs/store.e2e.js) | Cart totals, removal, and checkout |
 | [Unit tests](test/unit) | Verify supported behaviors and invalid inputs |
 | [WebdriverIO examples](test/specs/login.e2e.js) | Runnable browser tests |
 
