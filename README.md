@@ -83,6 +83,10 @@ The browser tests use a local generated sign-in page and do not require any exte
 | [Unit tests](test/unit) | Verify supported behaviors and invalid inputs |
 | [WebdriverIO examples](test/specs/login.e2e.js) | Runnable browser tests |
 
+## Independent evaluation
+
+If you want to try the analyzer or report a reproducible bug, follow the [15-minute pilot guide](docs/PILOT_EVALUATION.md). Please submit only synthetic examples and factual feedback. We do not request stars, testimonials, or citations for participation.
+
 ## Contributing and releases
 
 Feedback, reproducible bug reports and focused test improvements are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing changes.
