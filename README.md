@@ -1,81 +1,86 @@
-# WebdriverIO Test Reliability Examples
+# Test Reliability Analysis Examples
 
-This project brings together small browser tests and a transparent way to review repeated test outcomes. It is intended for engineers who want to understand test failures, keep examples reproducible and make their automation easier to maintain.
+A small, framework-independent set of JavaScript tools for reviewing repeated test results and prioritizing investigations after component changes.
 
-The browser tests use a locally generated sample sign in page. A separate JavaScript utility summarizes repeated test outcomes and distinguishes consistent results from runs that contain both passes and failures.
+The project helps answer two practical questions:
+- Which tests have shown inconsistent results across repeated runs?
+- Which tests may deserve attention when a particular application component changes?
 
-## Getting started
+It supports a simple JSON test-history format and limited conversions from Jest and Playwright JSON reports. The original WebdriverIO browser tests remain as runnable examples.
 
-Requirements: Node.js 22, npm and Chrome or Chromium.
+> **Status:** Experimental engineering examples. The dependency-based score is a transparent heuristic, not a validated prediction of failure. No independent adoption or performance improvement has been established.
+
+## Quick start
+
+Requires Node.js 22 and npm. Chrome or Chromium is needed only for the browser examples.
 
 ```bash
+git clone https://github.com/naveenprakash82/Boilerplate-WebDriverio.git
+cd Boilerplate-WebDriverio
 npm install
-npm test
 npm run test:unit
-```
-
-To check syntax or run the smoke scenario:
-
-```bash
-npm run check
-npm run test:smoke
-```
-
-## Analyze repeated test results
-
-```bash
 npm run analyze -- examples/sample-runs.json
 ```
 
-The input is a JSON array of test identifiers, execution identifiers and outcomes. The utility reports execution counts, failure rates, skipped runs and whether passing and failing outcomes were both observed. It does not claim to identify the underlying cause of failure.
+This command reads local synthetic results and prints a JSON summary of passes, failures, skipped executions, failure rates, duration coverage and mixed outcomes.
 
-To convert an example Jest JSON report into this format:
+**[See sample output and interpretation](docs/EXAMPLE_OUTPUT.md)**
 
-```bash
-npm run jest:convert -- run-001 examples/sample-jest-results.json > jest-records.json
-npm run analyze -- jest-records.json
-```
-
-To convert an example Playwright JSON reporter file:
-
-```bash
-npm run playwright:convert -- run-001 examples/sample-playwright-report.json > playwright-records.json
-npm run analyze -- playwright-records.json
-```
-
-To prioritize test investigations using run history and a synthetic dependency map:
+## Prioritize investigations after a change
 
 ```bash
 npm run prioritize -- examples/sample-runs.json examples/sample-dependencies.json examples/sample-changed-components.json
 ```
 
-See [the dependency prioritization guide](docs/dependency-prioritization.md) for the scoring approach, assumptions and limitations.
+The dependency map and changed-component list are explicit JSON inputs. The tool does not discover source-code dependencies. See [method, weights, and limitations](docs/dependency-prioritization.md).
 
-See [the Playwright adapter guide](docs/playwright-json-adapter.md) for its supported fields and limitations.
+## Import test results
 
-See [the Jest adapter guide](docs/jest-json-adapter.md) for supported fields and limitations.
+Playwright JSON reporter:
 
-See [the reliability analysis guide](docs/reliability-analysis.md) for the input format, interpretation and limitations. The example data is entirely synthetic.
+```bash
+npm run playwright:convert -- run-001 examples/sample-playwright-report.json > converted.json
+npm run analyze -- converted.json
+```
 
-## Project contents
+Jest JSON reporter:
 
-* [Browser test scenarios](test/specs/login.e2e.js), [page object](test/pageobjects/login.page.js) and [locally defined page](test/fixtures/loginFixture.js)
-* [Result based wait helper](test/helpers/waitForResult.js)
-* [Dependency-based prioritization](src/reliability/priorityFromDependencies.js) with [unit tests](test/unit/priorityFromDependencies.test.js)
-* [Playwright JSON adapter](src/reliability/playwrightJsonAdapter.js) with [unit tests](test/unit/playwrightJsonAdapter.test.js)
-* [Jest JSON adapter](src/reliability/jestJsonAdapter.js) with [unit tests](test/unit/jestJsonAdapter.test.js)
-* [Independent result analysis](src/reliability/analyzeRuns.js) and [unit tests](test/unit/analyzeRuns.test.js)
-* [Guidance for investigating unstable tests](docs/flaky-tests.md)
-* [Automated checks](.github/workflows/browser-tests.yml)
+```bash
+npm run jest:convert -- run-001 examples/sample-jest-results.json > converted.json
+npm run analyze -- converted.json
+```
 
-## Scope and limitations
+See the [Playwright format guide](docs/playwright-json-adapter.md) and [Jest format guide](docs/jest-json-adapter.md). Conversions support only the documented fields and reporter structures. Do not assume compatibility with every version of either tool.
 
-This repository demonstrates a small engineering approach, not a proven new industry method or a production grade reliability service. Its failure categories are descriptive. Reproducibility and independent assessment matter more than collecting repository activity. External adoption, practical performance and meaningful comparison with existing tools have not yet been established.
+To compare multiple runs, combine converted record arrays from distinct run IDs into one JSON array. Do not concatenate JSON documents as text.
 
-## Contributing
+## Tests
 
-Please start with an issue explaining the problem and a small reproducible example. Changes should include tests and a clear explanation of their expected benefit. Feedback and independent evaluation are welcome.
+```bash
+npm run check
+npm run test:unit
+npm test
+```
 
-## Privacy and ownership
+The browser tests use a local generated sign-in page and do not require any external account.
 
-All example results are invented and all demonstration code is written for this repository. Do not submit employer or client source code, internal test data, private incident reports, credentials, customer information or confidential system details. Check ownership and approval before sharing anything derived from work projects.
+## Implementation
+
+| Component | Purpose |
+| --- | --- |
+| [analyzeRuns.js](src/reliability/analyzeRuns.js) | Descriptive test-run statistics |
+| [priorityFromDependencies.js](src/reliability/priorityFromDependencies.js) | Dependency-aware investigation ordering |
+| [playwrightJsonAdapter.js](src/reliability/playwrightJsonAdapter.js) | Convert selected Playwright JSON test results |
+| [jestJsonAdapter.js](src/reliability/jestJsonAdapter.js) | Convert selected Jest JSON assertion results |
+| [Unit tests](test/unit) | Verify supported behaviors and invalid inputs |
+| [WebdriverIO examples](test/specs/login.e2e.js) | Runnable browser tests |
+
+## Contributing and releases
+
+Feedback, reproducible bug reports and focused test improvements are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing changes.
+
+The [release plan](docs/RELEASE_PLAN.md) records what remains before a stable release. **No npm distribution is published by this work.** The MIT license has been prepared for ownership review, but it is not active on the default branch until approved and merged. Please do not assume permission to reuse or redistribute the code until the license is published.
+
+## Responsible use
+
+All committed sample data is synthetic. Do not upload employer-owned source code, internal dependency maps, private incident reports, personal information, credentials or customer data. AI-assisted code and documentation must be reviewed by their human contributors, with disclosures as required by receiving projects.
