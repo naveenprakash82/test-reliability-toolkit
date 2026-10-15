@@ -93,7 +93,7 @@ The batch output identifies runs where each test was observed or missing. Distin
 
 ## Usage walkthrough
 
-See the [getting started walkthrough](docs/PILOT_EVALUATION.md) for additional examples and troubleshooting.
+See the [getting started walkthrough](docs/GETTING_STARTED.md) for additional examples and troubleshooting.
 
 ## Contributing and releases
 
