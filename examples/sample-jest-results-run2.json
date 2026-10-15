@@ -1,0 +1,12 @@
+{
+  "testResults": [
+    {
+      "name": "specs/example.test.js",
+      "assertionResults": [
+        { "fullName": "example signs in", "status": "failed", "duration": 29 },
+        { "fullName": "example handles invalid input", "status": "passed", "duration": 26 },
+        { "fullName": "example optional feature", "status": "pending" }
+      ]
+    }
+  ]
+}

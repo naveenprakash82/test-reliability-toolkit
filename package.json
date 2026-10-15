@@ -8,15 +8,19 @@
     "test:smoke": "wdio run ./wdio.conf.js --mochaOpts.grep smoke",
     "test:unit": "node --test test/unit/*.test.js",
     "analyze": "node src/reliability/cli.js",
-    "check": "node --check wdio.conf.js && node --check test/fixtures/loginFixture.js && node --check test/pageobjects/login.page.js && node --check test/specs/login.e2e.js && node --check test/helpers/waitForResult.js && node --check src/reliability/analyzeRuns.js && node --check src/reliability/cli.js && node --check test/unit/analyzeRuns.test.js && node --check src/reliability/jestJsonAdapter.js && node --check src/reliability/jestJsonCli.js && node --check test/unit/jestJsonAdapter.test.js && node --check src/reliability/playwrightJsonAdapter.js && node --check src/reliability/playwrightJsonCli.js && node --check test/unit/playwrightJsonAdapter.test.js && node --check src/reliability/priorityFromDependencies.js && node --check src/reliability/priorityCli.js && node --check test/unit/priorityFromDependencies.test.js && node --check test/fixtures/storeFixture.js && node --check test/specs/store.e2e.js && node --check src/contracts/orderContract.js && node --check test/unit/orderContract.test.js",
+    "check": "node scripts/check.js",
     "jest:convert": "node src/reliability/jestJsonCli.js",
     "playwright:convert": "node src/reliability/playwrightJsonCli.js",
-    "prioritize": "node src/reliability/priorityCli.js"
+    "prioritize": "node src/reliability/priorityCli.js",
+    "analyze:batch": "node src/reliability/batchCli.js"
   },
   "devDependencies": {
     "@wdio/cli": "^9.0.0",
     "@wdio/local-runner": "^9.0.0",
     "@wdio/mocha-framework": "^9.0.0",
     "@wdio/spec-reporter": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }
