@@ -12,7 +12,7 @@ It supports a simple JSON test-history format and limited conversions from Jest 
 
 ## Quick start
 
-Requires Node.js 22 and npm. Chrome or Chromium is needed only for the browser examples.
+Requires Node.js 18 or later and npm. Chrome or Chromium is needed only for the browser examples.
 
 ```bash
 git clone https://github.com/naveenprakash82/Boilerplate-WebDriverio.git
@@ -58,7 +58,7 @@ npm run analyze -- converted.json
 
 See the [Playwright format guide](docs/playwright-json-adapter.md) and [Jest format guide](docs/jest-json-adapter.md). Conversions support only the documented fields and reporter structures. Do not assume compatibility with every version of either tool.
 
-To compare multiple runs, combine converted record arrays from distinct run IDs into one JSON array. Do not concatenate JSON documents as text.
+To compare multiple runs, use `npm run analyze:batch -- jest ci-001 examples/sample-jest-results.json ci-002 examples/sample-jest-results-run2.json`. For Playwright, use `playwright` and Playwright JSON reports. See [batch analysis](docs/batch-analysis.md) for missing-run coverage and duplicate-report warnings.
 
 ## Tests
 
@@ -91,7 +91,7 @@ If you want to try the analyzer or report a reproducible bug, follow the [15-min
 
 Feedback, reproducible bug reports and focused test improvements are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing changes.
 
-The [release plan](docs/RELEASE_PLAN.md) records what remains before a stable release. **No npm distribution is published by this work.** The MIT license has been prepared for ownership review, but it is not active on the default branch until approved and merged. Please do not assume permission to reuse or redistribute the code until the license is published.
+The [release plan](docs/RELEASE_PLAN.md) records what remains before a stable release. **No npm distribution is published by this work.** The project is available under the [MIT License](LICENSE). Third-party dependencies remain subject to their own licenses.
 
 ## Responsible use
 
