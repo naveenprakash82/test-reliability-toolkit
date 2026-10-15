@@ -1,12 +1,12 @@
 ---
-name: Evaluation feedback
-about: Share reproducible feedback from an independent evaluation
+name: Feature request or feedback
+about: Suggest an improvement or report a usability issue
 title: "Feedback: "
 labels: ""
 assignees: ""
 ---
 
-## What did you evaluate?
+## What are you working with?
 - Runner/reporter and version:
 - Command or feature:
 - Synthetic or permission-cleared sample used:
@@ -17,4 +17,4 @@ assignees: ""
 
 ## Suggested improvement
 
-Do not attach confidential reports, private CI configuration, credentials, or customer information. No endorsement or star is expected.
+Do not attach confidential reports, private CI configuration, credentials, or customer information. 
