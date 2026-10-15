@@ -8,12 +8,12 @@ QA engineers, test infrastructure maintainers and CI owners with a small suite o
 
 ## Fifteen-minute evaluation
 
-1. Clone the repository and install dependencies with `npm install` using Node.js 22.
+1. Clone the repository and install dependencies with `npm install` using Node.js 18 or later.
 2. Run `npm run test:unit` and `npm run analyze -- examples/sample-runs.json`.
 3. Run `npm run prioritize -- examples/sample-runs.json examples/sample-dependencies.json examples/sample-changed-components.json`.
-4. Read [sample output](EXAMPLE_OUTPUT.md) and [dependency scoring limits](dependency-prioritization.md).
-5. If you have a permitted Jest or Playwright JSON report, use the relevant adapter and evaluate the output. Do not post sensitive reports to public issues.
-6. Note any incorrect classifications, unsupported fields, inconsistent test identities, or confusing outputs.
+4. Compare two synthetic Jest reports with `npm run analyze:batch -- jest ci-001 examples/sample-jest-results.json ci-002 examples/sample-jest-results-run2.json` and inspect missing-run coverage.\n5. Read [sample output](EXAMPLE_OUTPUT.md) and [dependency scoring limits](dependency-prioritization.md).
+6. If you have a permitted Jest or Playwright JSON report, use the relevant adapter and evaluate the output. Do not post sensitive reports to public issues.
+7. Note any incorrect classifications, unsupported fields, inconsistent test identities, or confusing outputs.
 
 ## What feedback would be useful?
 
@@ -36,4 +36,4 @@ The project does not currently claim real-world adoption. Independent testing ma
 - The dependency map is manually authored.
 - The JSON adapters implement documented subsets, not every reporter version.
 - This project has not completed a broad, independent compatibility review.
-- Check the repository's active license before redistributing code; the proposed MIT grant is still pending ownership confirmation.
+- The original project code is available under the [MIT License](../LICENSE); third-party dependencies have their own licenses.
