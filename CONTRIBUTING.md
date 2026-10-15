@@ -10,7 +10,7 @@ This project is a small test reliability utility with independent examples for W
 
 ## Development
 
-Requirements: Node.js 22, npm, and Chrome or Chromium for browser tests.
+Requirements: Node.js 18 or later, npm, and Chrome or Chromium for browser tests.
 
 ```bash
 npm install
@@ -31,4 +31,4 @@ If AI tools materially assisted with generating code or tests, disclose that hel
 
 ## Licensing
 
-A proposed MIT license is under ownership review. Until a license is published on the default branch, do not assume that the repository grants reuse or redistribution rights. Submissions should not include material that you lack permission to contribute.
+The project's original code is distributed under the [MIT License](LICENSE). Third-party components retain their own licenses. Submissions must not include material that you lack permission to contribute.
