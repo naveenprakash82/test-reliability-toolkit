@@ -1,12 +1,12 @@
-# Independent pilot: evaluating test reliability summaries
+# Getting started with test reliability analysis
 
-This is an invitation to evaluate an early-stage engineering example, not a claim of production readiness.
+Use these examples to explore repeated test outcomes and component-based investigation priority.
 
-## Who this is for
+## Supported workflows
 
 QA engineers, test infrastructure maintainers and CI owners with a small suite of repeated Jest or Playwright runs. WebdriverIO users can also evaluate the synthetic checkout cases. Public or permission-cleared reports only.
 
-## Fifteen-minute evaluation
+## Walkthrough
 
 1. Clone the repository and install dependencies with `npm install` using Node.js 18 or later.
 2. Run `npm run test:unit` and `npm run analyze -- examples/sample-runs.json`.
@@ -15,7 +15,7 @@ QA engineers, test infrastructure maintainers and CI owners with a small suite o
 6. If you have a permitted Jest or Playwright JSON report, use the relevant adapter and evaluate the output. Do not post sensitive reports to public issues.
 7. Note any incorrect classifications, unsupported fields, inconsistent test identities, or confusing outputs.
 
-## What feedback would be useful?
+## Troubleshooting and feature requests
 
 - Which runner and reporter version did you use?
 - Did the CLI run as documented? If not, what command and error did you see?
@@ -26,14 +26,10 @@ QA engineers, test infrastructure maintainers and CI owners with a small suite o
 
 Please file a [GitHub issue](https://github.com/naveenprakash82/Boilerplate-WebDriverio/issues/new) describing the behavior and a **synthetic reproduction**. Never attach employer-owned reports, screenshots, URLs, configuration or customer data.
 
-## Evidence and attribution
-
-The project does not currently claim real-world adoption. Independent testing may lead to issue reports, suggested changes, accepted pull requests, or permission-based case studies. We will record only feedback and integrations that can be independently verified. There is no expectation of a star, endorsement, testimonial or citation in exchange for a review.
-
 ## Known limitations
 
 - The scores are heuristic and are not calibrated failure probabilities.
 - The dependency map is manually authored.
 - The JSON adapters implement documented subsets, not every reporter version.
-- This project has not completed a broad, independent compatibility review.
+- Compatibility varies by runner and reporter version; check supported fields before integrating.
 - The original project code is available under the [MIT License](../LICENSE); third-party dependencies have their own licenses.
