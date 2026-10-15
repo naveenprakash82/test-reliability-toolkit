@@ -1,4 +1,4 @@
-# Test Reliability Analysis Examples
+# Test Reliability Analysis for WebdriverIO, Jest and Playwright
 
 A small, framework-independent set of JavaScript tools for reviewing repeated test results and prioritizing investigations after component changes.
 
@@ -8,7 +8,7 @@ The project helps answer two practical questions:
 
 It supports a simple JSON test-history format and limited conversions from Jest and Playwright JSON reports. WebdriverIO browser tests include login and a synthetic shopping-cart/checkout workflow.
 
-> **Status:** Experimental engineering examples. The dependency-based score is a transparent heuristic, not a validated prediction of failure. No independent adoption or performance improvement has been established.
+> **Note:** Dependency-based priority scores are heuristic investigation aids, not calibrated failure probabilities.
 
 ## Quick start
 
@@ -83,9 +83,17 @@ The browser tests use a local generated sign-in page and do not require any exte
 | [Unit tests](test/unit) | Verify supported behaviors and invalid inputs |
 | [WebdriverIO examples](test/specs/login.e2e.js) | Runnable browser tests |
 
-## Compare separate CI runs\n\n```bash\nnpm run analyze:batch -- jest ci-001 examples/sample-jest-results.json ci-002 examples/sample-jest-results-run2.json\n```\n\nThe batch output identifies runs where each test was observed or missing. Distinct files with identical bytes trigger a warning, not an automatic rejection. See the [batch analysis guide](docs/batch-analysis.md).\n\n## Independent evaluation
+## Compare separate CI runs
 
-If you want to try the analyzer or report a reproducible bug, follow the [15-minute pilot guide](docs/PILOT_EVALUATION.md). Please submit only synthetic examples and factual feedback. We do not request stars, testimonials, or citations for participation.
+```bash
+npm run analyze:batch -- jest ci-001 examples/sample-jest-results.json ci-002 examples/sample-jest-results-run2.json
+```
+
+The batch output identifies runs where each test was observed or missing. Distinct files with identical bytes trigger a warning, not an automatic rejection. See the [batch analysis guide](docs/batch-analysis.md).
+
+## Usage walkthrough
+
+See the [getting started walkthrough](docs/PILOT_EVALUATION.md) for additional examples and troubleshooting.
 
 ## Contributing and releases
 
