@@ -1,53 +1,66 @@
-# External engineering evaluation: test reliability utilities
+# Evaluate the Test Reliability Toolkit: a 15-minute hands-on review
 
-This is an invitation to **evaluate**, not a claim of production adoption or predictive accuracy. The code is an experimental reference tool that summarizes repeated test runs and ranks investigations using a manually maintained dependency map.
+CI jobs do not always produce the same set of test results. A test might pass in one run, fail in another, or be absent from a later report. Looking only at a single red or green build can hide that history.
 
-## Fifteen-minute review
+This experimental JavaScript utility summarizes repeated runs from supported Jest or Playwright JSON reports. It also demonstrates a separate, manually mapped component-impact ranking. We are looking for engineers to **run it, challenge its assumptions, and report what does not work**.
 
-Requirements: Node.js 18 or later and npm. Browser tests are optional and require Chrome/Chromium.
+**Repository:** https://github.com/naveenprakash82/Boilerplate-WebDriverio
+
+## 1. Run the example (about 5 minutes)
+
+Requires Node.js 18+ and npm. Chrome is **not** required for this review.
 
 ```bash
 git clone https://github.com/naveenprakash82/Boilerplate-WebDriverio.git
 cd Boilerplate-WebDriverio
 npm install
 npm run test:unit
-npm run analyze -- examples/sample-runs.json
 npm run analyze:batch -- jest ci-001 examples/sample-jest-results.json ci-002 examples/sample-jest-results-run2.json
+```
+
+The two synthetic Jest reports contain these outcomes:
+
+| Test | Run ci-001 | Run ci-002 | Interpretation |
+| --- | --- | --- | --- |
+| example signs in | passed | failed | Both outcomes observed |
+| example handles invalid input | failed | passed | Both outcomes observed |
+| example optional feature | pending | pending | Skipped, not a failure |
+
+The analyzer reports a **50% observed failure rate** for each mixed-outcome test because each was executed twice, not a 50% probability that it will fail in the future. Both are marked `insufficientEvidence` because fewer than three executions were observed. The optional feature has no executed observations and a null failure rate.
+
+The example does not contain an absent test. If you want to examine missing-run behavior, remove one `assertionResults` entry from a **copy** of one report and rerun the command. The corresponding `missingRuns` entry should name that run; absence must not be silently counted as skipped. Keep the original fixtures unchanged.
+
+## 2. Explore the dependency ranking (about 3 minutes)
+
+```bash
 npm run prioritize -- examples/sample-runs.json examples/sample-dependencies.json examples/sample-changed-components.json
 ```
 
-Use synthetic or public/authorized test data only. No company code, private logs or internal CI history is needed.
+In this separate synthetic example, `sample login` has mixed outcomes and maps to the changed `authentication` component. The score is a fixed heuristic, not a learned or calibrated prediction. Its dependency map is entered **manually** and may be impractical for large systems.
 
-## Questions for reviewers
+## 3. Tell us what would stop you from using it (about 7 minutes)
 
-1. Does the run summary make missing tests, skipped results, and observed failures understandable? What might mislead a user?
-2. Are the Jest/Playwright adapters usable for the exact reporter versions your team uses? If not, provide a **sanitized** or synthetic reproduction.
-3. Would JUnit XML support make this more useful in your CI pipeline? Which format variations matter?
-4. Is the manual component dependency map realistic for your team? What existing public or approved metadata would support automated mapping?
-5. Does the current priority heuristic improve on sorting by past failure rate, or is it less useful? Please include an example where it fails.
-6. What installation or integration step would prevent your team from trying this?
+Choose any of these questions that match your experience:
 
-## How to report findings
+1. **Accuracy:** Does it distinguish failed, skipped and absent tests clearly? What does it misrepresent?
+2. **Compatibility:** Does a permitted Jest/Playwright JSON report from a specific version convert correctly? If not, share an invented minimal reproduction.
+3. **CI interoperability:** Would JUnit XML support, a GitHub Action, or a history store actually help your team? Which exact workflow needs it?
+4. **Dependency mapping:** How would your team derive test-to-component relationships from existing approved coverage or build metadata?
+5. **Baseline comparison:** Would simply sorting by observed failure frequency be more useful than the current weighted prioritizer? Show a counterexample if possible.
+6. **Usability:** Which install, configuration, output or documentation detail would prevent a trial?
 
-Open a GitHub issue with:
-- Your test framework, version, OS/CI platform, and Node version
-- Command attempted, synthetic input, actual result, and expected result
-- Whether you ran the code, only reviewed it, or integrated it into an approved project
-- An optional link to a public implementation or permitted reproduction
+## 4. Share findings
 
-Critical feedback is welcome. You are not being asked to star or fork the project. Please avoid testimonials without hands-on evaluation.
+Use the [independent pilot feedback issue form](../.github/ISSUE_TEMPLATE/pilot-feedback.md) or open a [GitHub issue](https://github.com/naveenprakash82/Boilerplate-WebDriverio/issues/new). Include your tool versions, commands, expected/actual outcome and an invented reproduction. Please say whether you **read the code**, **ran the examples**, or **integrated it into an approved project**; these are different levels of evaluation.
 
-## What this does not do
+If a technical fix is useful, see [CONTRIBUTING.md](../CONTRIBUTING.md). Critical feedback is welcome. No stars, endorsements, or testimonials are requested.
 
-- No JUnit XML import yet
-- No automatic dependency discovery, persistent CI history, or packaged GitHub Action
-- No probabilistic flakiness prediction, remediation, or proven performance gain
-- No third-party production adoption currently established
+## Present limitations
 
-## Research directions, not released features
+- Supported ingestion is limited to documented subsets of Jest and Playwright JSON. No JUnit XML adapter yet.
+- There is no automatically inferred dependency map, persistent CI history, packaged GitHub Action or hosted dashboard.
+- The scoring weights have not been validated against a simple baseline or real-world outcomes.
+- This is not a probabilistic flaky-test detector; no independent production adoption is currently established.
+- All committed examples are synthetic. Do not share employer data, customer reports, credentials, private logs or confidential architecture.
 
-A reproducible JavaScript/Playwright flaky-test benchmark could be useful if a prior-art review identifies a genuine gap. It would require licensed public datasets, reproducible environments, ground-truth labels and simple baseline comparisons.
-
-A separate CI test-resource lifecycle proof of concept may explore pipeline namespacing, cleanup safety, retention windows and fault injection. It must be independently designed and must not use or reconstruct employer-owned systems or confidential information.
-
-External evaluators can contribute improvements after reviewing the [contributor guidance](../CONTRIBUTING.md).
+For planned capabilities and release criteria, see the separate [release plan](RELEASE_PLAN.md).
