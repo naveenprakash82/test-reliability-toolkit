@@ -2,7 +2,7 @@
 
 An experimental JavaScript toolkit for reviewing repeated test results from supported Jest and Playwright JSON reports, with WebdriverIO browser examples and a transparent dependency-based investigation heuristic.
 
-**Seeking independent technical evaluation:** [Run the 15-minute evaluation and report findings](docs/EXTERNAL_EVALUATION.md). Reproducible failures, missing reporter formats and comparisons against basic baselines are particularly valuable.
+**Seeking independent technical evaluation:** [Run the 15-minute evaluation and report findings](docs/EXTERNAL_EVALUATION.md). If you have integrated the utility into another authorized project, see [how to document reproducible external use](docs/INDEPENDENT_USE.md). Reproducible failures, missing reporter formats and comparisons against basic baselines are particularly valuable.
 
 The project helps answer two practical questions:
 - Which tests have shown inconsistent results across repeated runs?
