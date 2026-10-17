@@ -97,6 +97,10 @@ The batch output identifies runs where each test was observed or missing. Distin
 
 Run `npm run compare:priorities -- examples/sample-runs.json examples/sample-dependencies.json examples/sample-changed-components.json` to compare the dependency-aware ordering with sorting by observed failure frequency. The output identifies rank differences, **not** evidence of improved predictive performance. See the [baseline comparison method](docs/BASELINE_COMPARISON.md).
 
+## Release-readiness criteria
+
+Before treating this as production-grade, review the [six release gates](docs/PRODUCTION_READINESS.md): core correctness, differentiation, deployment and CI, independent reproducibility, comparative evidence, and community readiness. The repository is currently an experimental toolkit intended for evaluation.
+
 ## Roadmap and limitations
 
 The next interoperability priorities are a validated JUnit XML adapter, easier ingestion of repeated CI runs, and validation against future outcomes on a held-out dataset. Automated dependency discovery and historical storage are research/development tasks, not existing capabilities. See [external evaluation questions](docs/EXTERNAL_EVALUATION.md).
