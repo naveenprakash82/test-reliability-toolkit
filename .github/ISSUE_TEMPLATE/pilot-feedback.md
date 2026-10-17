@@ -1,31 +1,37 @@
 ---
-name: Independent pilot feedback
-about: Report a reproducible behavior or usability problem found while evaluating the reliability utility
-title: "[pilot] "
+name: Independent technical evaluation
+about: Reproduce an issue, test a supported reporter format, or report integration feedback
+title: "[evaluation] "
 labels: []
 assignees: []
 ---
 
-### What were you trying to do?
+### What did you evaluate?
+- [ ] Read the implementation or documentation
+- [ ] Executed the provided synthetic examples
+- [ ] Tested using independently prepared, permitted inputs
+- [ ] Integrated into an authorized project
 
-### Runner, reporter and version
-For example, Playwright JSON reporter, or Jest JSON output. Do not share private configuration.
+### Environment
+Node version, OS, test framework, reporter version and CI platform (if relevant):
 
-### Exact command and result
+### Command and minimal synthetic input
 
 ```text
-# Reproducible command and sanitized error, if applicable
+# Command and invented reproduction (never employer/customer data)
 ```
-
-### Expected behavior
 
 ### Observed behavior
 
-### Synthetic reproduction
-Please create a minimal invented input that reproduces the issue. Do not upload employer/customer test data, credentials, internal code or screenshots.
+### Expected behavior
 
-### Would this change make the tool useful?
-Optional. Tell us which workflow it would improve and why.
+### Reproducibility
+How many times did you run this? Can another engineer reproduce it?
 
-### Permission to reference your feedback publicly
-Optional: yes / no. No endorsement or citation is expected.
+### Practical usefulness
+Which specific task would this support in your CI or quality workflow? What blocks adoption?
+
+### Optional follow-up
+Are you willing to answer technical questions on this issue? You are not being asked to endorse the project.
+
+**Privacy:** Please do not attach employer code, real internal reports, private run logs, credentials or confidential diagrams.
