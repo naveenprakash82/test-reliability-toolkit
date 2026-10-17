@@ -93,9 +93,13 @@ npm run analyze:batch -- jest ci-001 examples/sample-jest-results.json ci-002 ex
 
 The batch output identifies runs where each test was observed or missing. Distinct files with identical bytes trigger a warning, not an automatic rejection. See the [batch analysis guide](docs/batch-analysis.md).
 
+## Compare rankings with a simple baseline
+
+Run `npm run compare:priorities -- examples/sample-runs.json examples/sample-dependencies.json examples/sample-changed-components.json` to compare the dependency-aware ordering with sorting by observed failure frequency. The output identifies rank differences, **not** evidence of improved predictive performance. See the [baseline comparison method](docs/BASELINE_COMPARISON.md).
+
 ## Roadmap and limitations
 
-The next interoperability priorities are a validated JUnit XML adapter, easier ingestion of repeated CI runs, and comparison against simple failure-frequency baselines. Automated dependency discovery and historical storage are research/development tasks, not existing capabilities. See [external evaluation questions](docs/EXTERNAL_EVALUATION.md).
+The next interoperability priorities are a validated JUnit XML adapter, easier ingestion of repeated CI runs, and validation against future outcomes on a held-out dataset. Automated dependency discovery and historical storage are research/development tasks, not existing capabilities. See [external evaluation questions](docs/EXTERNAL_EVALUATION.md).
 
 The GitHub repository retains its original `Boilerplate-WebDriverio` name for now. Its current technical focus is test reliability analysis; a repository rename and package identity change need a separate compatibility review.
 
