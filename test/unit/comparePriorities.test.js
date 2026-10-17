@@ -18,7 +18,7 @@ test('compares ordering and reveals changed mapping influence rather than claimi
 });
 test('distinguishes historical failures from a changed never-observed test', () => {
   const result = comparePriorities([
-    record('known', '1', 'failed'), record('known', '2', 'passed')
+    record('known', '1', 'failed'), record('known', '2', 'passed'), record('known', '3', 'passed'), record('known', '4', 'passed')
   ], [
     { testId: 'known', components: [] },
     { testId: 'unobserved', components: ['change'] }
