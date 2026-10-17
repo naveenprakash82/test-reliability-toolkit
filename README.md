@@ -1,6 +1,8 @@
-# Test Reliability Analysis for WebdriverIO, Jest and Playwright
+# Test Reliability Analysis Toolkit
 
-A small, framework-independent set of JavaScript tools for reviewing repeated test results and prioritizing investigations after component changes.
+An experimental JavaScript toolkit for reviewing repeated test results from supported Jest and Playwright JSON reports, with WebdriverIO browser examples and a transparent dependency-based investigation heuristic.
+
+**Seeking independent technical evaluation:** [Run the 15-minute evaluation and report findings](docs/EXTERNAL_EVALUATION.md). Reproducible failures, missing reporter formats and comparisons against basic baselines are particularly valuable.
 
 The project helps answer two practical questions:
 - Which tests have shown inconsistent results across repeated runs?
@@ -90,6 +92,12 @@ npm run analyze:batch -- jest ci-001 examples/sample-jest-results.json ci-002 ex
 ```
 
 The batch output identifies runs where each test was observed or missing. Distinct files with identical bytes trigger a warning, not an automatic rejection. See the [batch analysis guide](docs/batch-analysis.md).
+
+## Roadmap and limitations
+
+The next interoperability priorities are a validated JUnit XML adapter, easier ingestion of repeated CI runs, and comparison against simple failure-frequency baselines. Automated dependency discovery and historical storage are research/development tasks, not existing capabilities. See [external evaluation questions](docs/EXTERNAL_EVALUATION.md).
+
+The GitHub repository retains its original `Boilerplate-WebDriverio` name for now. Its current technical focus is test reliability analysis; a repository rename and package identity change need a separate compatibility review.
 
 ## Usage walkthrough
 
