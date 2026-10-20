@@ -17,8 +17,9 @@ function countAttribute(value, field) {
 }
 function junitXmlToRecords(xml, runId) {
   required(runId, 'runId');
-  if (typeof xml !== 'string' || !xml.trim()) throw new TypeError('Expected nonempty JUnit XML text');
+  if (typeof xml !== 'string') throw new TypeError('Expected JUnit XML text');
   if (Buffer.byteLength(xml, 'utf8') > MAX_BYTES) throw new Error('JUnit XML exceeds 1 MiB limit');
+  if (!xml.trim()) throw new TypeError('Expected nonempty JUnit XML text');
   const parser = new SaxesParser({ xmlns: false });
   const stack = [];
   const records = [];
