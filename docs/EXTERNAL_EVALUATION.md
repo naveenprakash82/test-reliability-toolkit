@@ -60,7 +60,7 @@ If a technical fix is useful, see [CONTRIBUTING.md](../CONTRIBUTING.md). Critica
 - Supported ingestion is limited to documented subsets of Jest and Playwright JSON. No JUnit XML adapter yet.
 - There is no automatically inferred dependency map, persistent CI history, packaged GitHub Action or hosted dashboard.
 - The scoring weights have not been validated against a simple baseline or real-world outcomes.
-- This is not a probabilistic flaky-test detector; no independent production adoption is currently established.
+- This is not a probabilistic flaky-test detector; ranking weights have not been calibrated against future test failures.
 - All committed examples are synthetic. Do not share employer data, customer reports, credentials, private logs or confidential architecture.
 
 For planned capabilities and release criteria, see the separate [release plan](RELEASE_PLAN.md).
