@@ -29,9 +29,9 @@ Node version, OS, test framework, reporter version and CI platform (if relevant)
 How many times did you run this? Can another engineer reproduce it?
 
 ### Practical usefulness
-Which specific task would this support in your CI or quality workflow? What blocks adoption?
+Which specific task would this support in your CI or quality workflow? What would make the workflow easier to use?
 
 ### Optional follow-up
-Are you willing to answer technical questions on this issue? You are not being asked to endorse the project.
+Are you willing to answer technical questions on this issue? 
 
 **Privacy:** Please do not attach employer code, real internal reports, private run logs, credentials or confidential diagrams.
