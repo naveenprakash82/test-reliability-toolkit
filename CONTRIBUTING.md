@@ -25,7 +25,7 @@ Run the analyzer with `npm run analyze -- examples/sample-runs.json`. Try the de
 
 Describe the specific problem, solution, example input and output, limitations, and tests executed. Include a regression test when fixing a bug. Explain whether the behavior is intentionally compatible with a public test-result format.
 
-Keep issue titles, commit messages, and pull request descriptions factual. Do not claim speedups, predictive accuracy, independent adoption, or production compatibility without reproducible evidence.
+Keep issue titles, commit messages, and pull request descriptions factual. Do not claim speedups, predictive accuracy, production compatibility without reproducible evidence.
 
 If AI tools materially assisted with generating code or tests, disclose that help when submitting a contribution, and personally review and verify the result. Contributors are responsible for understanding the change.
 
