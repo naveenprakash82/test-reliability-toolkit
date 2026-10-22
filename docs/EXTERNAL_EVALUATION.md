@@ -63,4 +63,4 @@ If a technical fix is useful, see [CONTRIBUTING.md](../CONTRIBUTING.md). Critica
 - This is not a probabilistic flaky-test detector; ranking weights have not been calibrated against future test failures.
 - All committed examples are synthetic. Do not share employer data, customer reports, credentials, private logs or confidential architecture.
 
-For planned capabilities and release criteria, see the separate [release plan](RELEASE_PLAN.md).
+For supported functionality and known limitations, see the [README](../README.md) and [getting started guide](GETTING_STARTED.md).
