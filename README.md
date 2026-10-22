@@ -2,7 +2,7 @@
 
 An experimental JavaScript toolkit for reviewing repeated test results from supported Jest and Playwright JSON reports, with WebdriverIO browser examples and a transparent dependency-based investigation heuristic.
 
-**Seeking independent technical evaluation:** [Run the 15-minute evaluation and report findings](docs/EXTERNAL_EVALUATION.md). If you have integrated the utility into another authorized project, see [how to document reproducible external use](docs/INDEPENDENT_USE.md). Reproducible failures, missing reporter formats and comparisons against basic baselines are particularly valuable.
+**Seeking independent technical evaluation:** [Run the 15-minute evaluation and report findings](docs/EXTERNAL_EVALUATION.md). Reproducible failures, missing reporter formats and comparisons against basic baselines are particularly valuable.
 
 The project helps answer two practical questions:
 - Which tests have shown inconsistent results across repeated runs?
@@ -97,9 +97,6 @@ The batch output identifies runs where each test was observed or missing. Distin
 
 Run `npm run compare:priorities -- examples/sample-runs.json examples/sample-dependencies.json examples/sample-changed-components.json` to compare the dependency-aware ordering with sorting by observed failure frequency. The output identifies rank differences, **not** evidence of improved predictive performance. See the [baseline comparison method](docs/BASELINE_COMPARISON.md).
 
-## Release-readiness criteria
-
-Before treating this as production-grade, review the [six release gates](docs/PRODUCTION_READINESS.md): core correctness, differentiation, deployment and CI, independent reproducibility, comparative evidence, and community readiness. The repository is currently an experimental toolkit intended for evaluation.
 
 ## Roadmap and limitations
 
@@ -114,8 +111,7 @@ See the [getting started walkthrough](docs/GETTING_STARTED.md) for additional ex
 ## Contributing and releases
 
 Feedback, reproducible bug reports and focused test improvements are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing changes.
-
-The [release plan](docs/RELEASE_PLAN.md) records what remains before a stable release. **No npm distribution is published by this work.** The project is available under the [MIT License](LICENSE). Third-party dependencies remain subject to their own licenses.
+ **No npm distribution is published by this work.** The project is available under the [MIT License](LICENSE). Third-party dependencies remain subject to their own licenses.
 
 ## Responsible use
 
