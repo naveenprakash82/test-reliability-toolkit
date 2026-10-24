@@ -52,3 +52,24 @@ test('skipped duration is not counted', () => {
   assert.equal(records[0].outcome, 'skipped');
   assert.equal(Object.hasOwn(records[0], 'durationMs'), false);
 });
+
+
+test('validates aggregate counts across multiple JUnit suites', () => {
+  const xml = '<testsuites tests="3" failures="1" errors="1" skipped="0">' +
+    '<testsuite name="a" tests="2" failures="1"><testcase name="ok"/>' +
+    '<testcase name="bad"><failure/></testcase></testsuite>' +
+    '<testsuite name="b" tests="1" errors="1"><testcase name="broken"><error/></testcase></testsuite>' +
+    '</testsuites>';
+  assert.deepEqual(junitXmlToRecords(xml, 'ci').map(record => record.outcome),
+    ['passed', 'failed', 'failed']);
+});
+
+test('rejects incorrect root totals rather than silently accepting missing results', () => {
+  const xml = '<testsuites tests="2" failures="0">' +
+    '<testsuite name="a"><testcase name="only"><failure/></testcase></testsuite>' +
+    '</testsuites>';
+  assert.throws(() => junitXmlToRecords(xml, 'ci'), /testsuites tests count/);
+  const xmlFailure = '<testsuites failures="0"><testsuite name="a">' +
+    '<testcase name="failed"><failure/></testcase></testsuite></testsuites>';
+  assert.throws(() => junitXmlToRecords(xmlFailure, 'ci'), /testsuites failures count/);
+});
