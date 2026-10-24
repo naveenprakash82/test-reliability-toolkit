@@ -2,13 +2,11 @@
 
 An experimental JavaScript toolkit for reviewing repeated test results from supported Jest and Playwright JSON reports, with WebdriverIO browser examples and a transparent dependency-based investigation heuristic.
 
-**Seeking independent technical evaluation:** [Run the 15-minute evaluation and report findings](docs/EXTERNAL_EVALUATION.md). Reproducible failures, missing reporter formats and comparisons against basic baselines are particularly valuable.
-
 The project helps answer two practical questions:
 - Which tests have shown inconsistent results across repeated runs?
 - Which tests may deserve attention when a particular application component changes?
 
-It supports a simple JSON test-history format and limited conversions from Jest and Playwright JSON reports. WebdriverIO browser tests include login and a synthetic shopping-cart/checkout workflow.
+It supports a simple JSON test-history format and limited conversions from Jest, Playwright JSON, and selected JUnit XML reports. WebdriverIO browser tests include login and a synthetic shopping-cart/checkout workflow.
 
 > **Note:** Dependency-based priority scores are heuristic investigation aids, not calibrated failure probabilities.
 
@@ -58,7 +56,14 @@ npm run jest:convert -- run-001 examples/sample-jest-results.json > converted.js
 npm run analyze -- converted.json
 ```
 
-See the [Playwright format guide](docs/playwright-json-adapter.md) and [Jest format guide](docs/jest-json-adapter.md). Conversions support only the documented fields and reporter structures. Do not assume compatibility with every version of either tool.
+JUnit XML (restricted subset):
+
+```bash
+npm run junit:convert -- run-001 examples/sample-junit-report.xml > converted.json
+npm run analyze -- converted.json
+```
+
+See the [JUnit XML format and safety guide](docs/junit-xml-adapter.md), [Playwright format guide](docs/playwright-json-adapter.md) and [Jest format guide](docs/jest-json-adapter.md). Conversions support only the documented fields and reporter structures. Do not assume compatibility with every version of either tool.
 
 To compare multiple runs, use `npm run analyze:batch -- jest ci-001 examples/sample-jest-results.json ci-002 examples/sample-jest-results-run2.json`. For Playwright, use `playwright` and Playwright JSON reports. See [batch analysis](docs/batch-analysis.md) for missing-run coverage and duplicate-report warnings.
 
@@ -80,6 +85,7 @@ The browser tests use a local generated sign-in page and do not require any exte
 | [priorityFromDependencies.js](src/reliability/priorityFromDependencies.js) | Dependency-aware investigation ordering |
 | [playwrightJsonAdapter.js](src/reliability/playwrightJsonAdapter.js) | Convert selected Playwright JSON test results |
 | [jestJsonAdapter.js](src/reliability/jestJsonAdapter.js) | Convert selected Jest JSON assertion results |
+| [junitXmlAdapter.js](src/reliability/junitXmlAdapter.js) | Convert a restricted subset of JUnit XML testcases |
 | [Order contract validator](src/contracts/orderContract.js) | Validate a synthetic consumer response contract |
 | [Checkout browser tests](test/specs/store.e2e.js) | Cart totals, removal, and checkout |
 | [Unit tests](test/unit) | Verify supported behaviors and invalid inputs |
@@ -100,7 +106,7 @@ Run `npm run compare:priorities -- examples/sample-runs.json examples/sample-dep
 
 ## Roadmap and limitations
 
-The next interoperability priorities are a validated JUnit XML adapter, easier ingestion of repeated CI runs, and validation against future outcomes on a held-out dataset. Automated dependency discovery and historical storage are research/development tasks, not existing capabilities. See [external evaluation questions](docs/EXTERNAL_EVALUATION.md).
+The next interoperability priorities are broader reporter compatibility, easier ingestion of repeated CI runs, and validation against future outcomes on a held-out dataset. Automated dependency discovery and historical storage are research/development tasks, not existing capabilities.
 
 The GitHub repository retains its original `Boilerplate-WebDriverio` name for now. Its current technical focus is test reliability analysis; a repository rename and package identity change need a separate compatibility review.
 
