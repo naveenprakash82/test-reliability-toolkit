@@ -51,6 +51,9 @@ function junitXmlToRecords(xml, runId) {
       }
     }
     const entry = { name, attrs };
+    if (name === 'testsuites') {
+      entry.counts = { tests: 0, failures: 0, errors: 0, skipped: 0 };
+    }
     if (name === 'testsuite') {
       required(attrs.name, 'testsuite name');
       if (++suiteCount > MAX_SUITES) throw new Error('Too many JUnit XML suites');
@@ -96,12 +99,19 @@ function junitXmlToRecords(xml, runId) {
         suite.counts[key]++;
       }
     }
-    if (entry.name === 'testsuite') {
+    if (entry.name === 'testsuite' || entry.name === 'testsuites') {
       for (const field of Object.keys(entry.counts)) {
         const declared = countAttribute(entry.attrs[field], field);
         if (declared !== null && declared !== entry.counts[field]) {
-          throw new Error('JUnit testsuite ' + entry.attrs.name + ' ' + field +
+          throw new Error('JUnit ' + entry.name + ' ' +
+            (entry.name === 'testsuite' ? entry.attrs.name + ' ' : '') + field +
             ' count ' + declared + ' disagrees with testcase records ' + entry.counts[field]);
+        }
+      }
+      if (entry.name === 'testsuite') {
+        const parent = stack[stack.length - 1];
+        if (parent && parent.name === 'testsuites') {
+          for (const field of Object.keys(entry.counts)) parent.counts[field] += entry.counts[field];
         }
       }
     }
