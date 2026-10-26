@@ -5,7 +5,7 @@ The manifest command analyzes local Jest/Playwright JSON reports or the document
 ## Example
 
 ```bash
-npm install
+npm ci
 npm run analyze:manifest -- examples/report-manifest.json
 ```
 

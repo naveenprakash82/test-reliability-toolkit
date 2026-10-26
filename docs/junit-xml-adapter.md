@@ -5,7 +5,7 @@ The JUnit XML converter reads a deliberately limited subset of local JUnit-style
 ## Example
 
 ```bash
-npm install
+npm ci
 npm run junit:convert -- ci-001 examples/sample-junit-report.xml > converted.json
 npm run analyze -- converted.json
 ```

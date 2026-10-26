@@ -12,12 +12,12 @@ It supports a simple JSON test-history format and limited conversions from Jest,
 
 ## Quick start
 
-Requires Node.js 18 or later and npm. Chrome or Chromium is needed only for the browser examples.
+Requires Node.js 22.19.0 or later and npm. Chrome or Chromium is needed only for the browser examples.
 
 ```bash
 git clone https://github.com/naveenprakash82/Boilerplate-WebDriverio.git
 cd Boilerplate-WebDriverio
-npm install
+npm ci
 npm run test:unit
 npm run analyze -- examples/sample-runs.json
 ```
@@ -98,6 +98,17 @@ npm run analyze:batch -- jest ci-001 examples/sample-jest-results.json ci-002 ex
 ```
 
 The batch output identifies runs where each test was observed or missing. Distinct files with identical bytes trigger a warning, not an automatic rejection. See the [batch analysis guide](docs/batch-analysis.md).
+
+## Compare multiple CI reports
+
+Create a manifest listing local Jest or Playwright JSON reports, or the documented restricted JUnit XML subset, from separate runs. The analyzer tracks missing tests separately from skipped tests and reports observed failure rates.
+
+```bash
+npm run analyze:manifest -- examples/report-manifest.json
+npm run analyze:manifest -- examples/junit-report-manifest.json
+```
+
+See the [manifest guide](docs/ci-report-manifest.md) for input limits, run identifiers, artifact collection, and limitations. This command reads local files; it does not download CI artifacts or verify their provenance.
 
 ## Compare rankings with a simple baseline
 

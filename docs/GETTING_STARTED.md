@@ -8,7 +8,7 @@ QA engineers, test infrastructure maintainers and CI owners with a small suite o
 
 ## Walkthrough
 
-1. Clone the repository and install dependencies with `npm install` using Node.js 18 or later.
+1. Clone the repository and install dependencies with `npm ci` using Node.js 22.19.0 or later.
 2. Run `npm run test:unit` and `npm run analyze -- examples/sample-runs.json`.
 3. Run `npm run prioritize -- examples/sample-runs.json examples/sample-dependencies.json examples/sample-changed-components.json`.
 4. Compare two synthetic Jest reports with `npm run analyze:batch -- jest ci-001 examples/sample-jest-results.json ci-002 examples/sample-jest-results-run2.json` and inspect missing-run coverage.\n5. Read [sample output](EXAMPLE_OUTPUT.md) and [dependency scoring limits](dependency-prioritization.md).
