@@ -42,7 +42,7 @@ test('rejects duplicate run IDs before inflating sample counts', () => {
 });
 
 test('rejects invalid input and unsupported reporter formats', () => {
-  assert.throws(() => analyzeReportBatch('junit', []), /format/);
+  assert.throws(() => analyzeReportBatch('unsupported', []), /format/);
   assert.throws(() => analyzeReportBatch('jest', []), /nonempty/);
   assert.throws(() => analyzeReportBatch('jest', [{runId:'',report:jestReport('passed')}]), /runId/);
   assert.throws(() => analyzeReportBatch('jest', [{runId:'one',report:{}}]), /Jest JSON/);
