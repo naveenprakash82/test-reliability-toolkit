@@ -24,6 +24,8 @@ jobs:
         run: npm run check
       - name: Verify reliability analysis
         run: npm run test:unit
+      - name: Verify synthetic JUnit manifest example
+        run: npm run analyze:manifest -- examples/junit-report-manifest.json
       - name: Run browser tests
         run: npm test
         env:
