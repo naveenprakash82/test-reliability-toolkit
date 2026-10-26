@@ -5,7 +5,7 @@ on:
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   browser-tests:
@@ -20,6 +20,16 @@ jobs:
           node-version: '22'
       - name: Install dependencies
         run: npm install --no-audit --no-fund
+      - name: Commit resolved lockfile on integration branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/integration/junit-manifest-review'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package-lock.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Lock integrated reporter dependency graph'
+            git push origin HEAD:refs/heads/integration/junit-manifest-review
+          fi
       - name: Check JavaScript syntax
         run: npm run check
       - name: Verify reliability analysis
@@ -30,3 +40,5 @@ jobs:
         run: npm test
         env:
           CI: 'true'
+      - name: Audit dependency advisories
+        run: npm audit --audit-level=high
