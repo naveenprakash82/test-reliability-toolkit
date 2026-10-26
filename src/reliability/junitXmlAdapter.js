@@ -16,7 +16,7 @@ function countAttribute(value, field) {
   return Number(value);
 }
 function junitXmlToRecords(xml, runId) {
-  required(runId, 'runId');
+  const normalizedRunId = required(runId, 'runId');
   if (typeof xml !== 'string') throw new TypeError('Expected JUnit XML text');
   if (Buffer.byteLength(xml, 'utf8') > MAX_BYTES) throw new Error('JUnit XML exceeds 1 MiB limit');
   if (!xml.trim()) throw new TypeError('Expected nonempty JUnit XML text');
@@ -33,7 +33,9 @@ function junitXmlToRecords(xml, runId) {
     const name = tag.name;
     const attrs = tag.attributes;
     const parent = stack[stack.length - 1];
-    if (name.includes(':')) throw new Error('JUnit XML namespaces are not supported');
+    if (name.includes(':') || Object.keys(attrs).some(key => key === 'xmlns' || key.startsWith('xmlns:'))) {
+      throw new Error('JUnit XML namespaces are not supported');
+    }
     if (!parent) {
       if (rootSeen || (name !== 'testsuites' && name !== 'testsuite')) {
         throw new Error('JUnit XML root must be testsuite or testsuites');
@@ -84,13 +86,13 @@ function junitXmlToRecords(xml, runId) {
       if (records.length >= MAX_TESTS) throw new Error('Too many JUnit XML testcases');
       const outcome = entry.marker === 'failure' || entry.marker === 'error' ? 'failed'
         : entry.marker === 'skipped' ? 'skipped' : 'passed';
-      const record = { testId: id, runId, outcome };
-      if (entry.attrs.time !== undefined && outcome !== 'skipped') {
+      const record = { testId: id, runId: normalizedRunId, outcome };
+      if (entry.attrs.time !== undefined) {
         const raw = entry.attrs.time;
         if (!/^[0-9]+(?:\.[0-9]+)?$/.test(raw)) throw new TypeError('Invalid JUnit testcase time');
         const durationMs = Math.round(Number(raw) * 1000);
         if (!Number.isSafeInteger(durationMs)) throw new TypeError('JUnit testcase time exceeds supported range');
-        record.durationMs = durationMs;
+        if (outcome !== 'skipped') record.durationMs = durationMs;
       }
       records.push(record);
       suite.counts.tests++;

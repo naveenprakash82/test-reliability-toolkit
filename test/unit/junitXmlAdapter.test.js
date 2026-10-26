@@ -73,3 +73,19 @@ test('rejects incorrect root totals rather than silently accepting missing resul
     '<testcase name="failed"><failure/></testcase></testsuite></testsuites>';
   assert.throws(() => junitXmlToRecords(xmlFailure, 'ci'), /testsuites failures count/);
 });
+
+
+test('rejects default and unused prefixed namespace declarations', () => {
+  assert.throws(() => junitXmlToRecords('<testsuite xmlns="urn:custom" name="s"><testcase name="a"/></testsuite>', 'r'), /namespaces/);
+  assert.throws(() => junitXmlToRecords('<testsuite xmlns:unused="urn:custom" name="s"><testcase name="a"/></testsuite>', 'r'), /namespaces/);
+});
+
+test('normalizes run IDs for consistent multi-run analysis', () => {
+  const records = junitXmlToRecords('<testsuite name="s"><testcase name="a"/></testsuite>', '  ci-42  ');
+  assert.equal(records[0].runId, 'ci-42');
+});
+
+test('validates testcase duration even when the testcase is skipped', () => {
+  assert.throws(() => junitXmlToRecords('<testsuite name="s"><testcase name="a" time="NaN"><skipped/></testcase></testsuite>', 'r'), /time/);
+  assert.throws(() => junitXmlToRecords('<testsuite name="s"><testcase name="a" time="-1"><skipped/></testcase></testsuite>', 'r'), /time/);
+});
