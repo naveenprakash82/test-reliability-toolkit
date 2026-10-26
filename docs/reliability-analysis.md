@@ -8,7 +8,7 @@ The included analysis utility groups repeated test results by test name and reco
 npm run analyze -- examples/sample-runs.json
 ```
 
-The sample contains invented demonstration results. They do not represent Naveen's employment, any production system or independent adoption.
+The sample contains synthetic demonstration results and does not describe any live production system.
 
 ## Input format
 
@@ -37,7 +37,7 @@ Failure rate is the number of failed runs divided by passed plus failed runs. Sk
 
 This utility is a basic, transparent summary rather than a predictive model, a root cause analyzer or a novel statistical method. Mixed outcomes can result from test defects, application changes, infrastructure, data dependencies or other causes. It does not distinguish these sources.
 
-Useful further work would include a documented adapter for a widely used public test result format, benchmark comparisons on publicly available data and feedback from independent maintainers. Any study should record its dataset, methods, limitations and reproducible results before making claims about accuracy or industry impact.
+Useful further work would include a documented adapter for a widely used public test result format, benchmark comparisons on publicly available data and feedback from independent maintainers. Any study should record its dataset, methods, limitations and reproducible results before making claims about accuracy or utility.
 
 ## Privacy
 

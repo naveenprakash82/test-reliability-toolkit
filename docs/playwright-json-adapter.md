@@ -33,4 +33,4 @@ This example intentionally excludes attachments, screenshots, errors, stdout and
 
 Playwright reports can contain internal file names and error details. Use only synthetic or authorized data. Review reports before public sharing; do not publish company test results or customer information.
 
-The implementation is a small adapter, not an established novel analysis method or evidence of external adoption.
+The adapter supports only the documented reporter structure and does not validate compatibility with every Playwright version.
