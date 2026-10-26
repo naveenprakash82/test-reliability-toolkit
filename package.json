@@ -14,6 +14,7 @@
     "junit:convert": "node src/reliability/junitXmlCli.js",
     "prioritize": "node src/reliability/priorityCli.js",
     "analyze:batch": "node src/reliability/batchCli.js",
+    "analyze:manifest": "node src/reliability/manifestCli.js",
     "compare:priorities": "node src/reliability/comparePrioritiesCli.js"
   },
   "dependencies": {

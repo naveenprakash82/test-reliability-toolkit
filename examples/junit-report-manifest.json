@@ -1,0 +1,13 @@
+{
+  "format": "junit",
+  "runs": [
+    {
+      "runId": "ci-001",
+      "file": "sample-junit-report.xml"
+    },
+    {
+      "runId": "ci-002",
+      "file": "sample-junit-report-run2.xml"
+    }
+  ]
+}

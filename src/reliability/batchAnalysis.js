@@ -1,10 +1,11 @@
 const { analyzeRuns } = require('./analyzeRuns');
 const { jestJsonToRecords } = require('./jestJsonAdapter');
 const { playwrightJsonToRecords } = require('./playwrightJsonAdapter');
+const { junitXmlToRecords } = require('./junitXmlAdapter');
 
 function analyzeReportBatch(format, runs) {
-  const adapters = { jest: jestJsonToRecords, playwright: playwrightJsonToRecords };
-  if (!Object.prototype.hasOwnProperty.call(adapters, format)) throw new TypeError('format must be jest or playwright');
+  const adapters = { jest: jestJsonToRecords, playwright: playwrightJsonToRecords, junit: junitXmlToRecords };
+  if (!Object.prototype.hasOwnProperty.call(adapters, format)) throw new TypeError('format must be jest, playwright, or junit');
   if (!Array.isArray(runs) || runs.length === 0) throw new TypeError('runs must be a nonempty array');
   const seen = new Set();
   const records = [];
