@@ -82,3 +82,15 @@ test('rejects unsupported or unsafe JUnit XML in a manifest', t => {
   f.write('manifest.json', { format: 'junit', runs: [{ runId: 'ci-01', file: 'unsafe.xml' }] });
   assert.throws(() => analyzeManifest(path.join(f.root, 'manifest.json')), /DOCTYPE/);
 });
+
+test('rejects a Jest manifest with a suite execution error rather than undercounting failures', t => {
+  const f = setup(t);
+  f.write('first.json', { testResults: [{
+    name: 'setup.test.js', status: 'failed', assertionResults: [],
+    testExecError: { message: 'module initialization failed' }
+  }] });
+  assert.throws(() => analyzeManifest(f.manifest([
+    { runId: 'ci-01', file: 'first.json' },
+    { runId: 'ci-02', file: 'second.json' }
+  ])), /suite failed outside recorded assertions/);
+});
