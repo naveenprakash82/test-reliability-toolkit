@@ -33,7 +33,7 @@ function junitXmlToRecords(xml, runId) {
     const name = tag.name;
     const attrs = tag.attributes;
     const parent = stack[stack.length - 1];
-    if (name.includes(':') || Object.keys(attrs).some(key => key === 'xmlns' || key.startsWith('xmlns:'))) {
+    if (name.includes(':') || Object.keys(attrs).some(key => key === 'xmlns' || key.includes(':'))) {
       throw new Error('JUnit XML namespaces are not supported');
     }
     if (!parent) {
