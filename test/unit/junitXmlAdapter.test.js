@@ -80,6 +80,11 @@ test('rejects default and unused prefixed namespace declarations', () => {
   assert.throws(() => junitXmlToRecords('<testsuite xmlns:unused="urn:custom" name="s"><testcase name="a"/></testsuite>', 'r'), /namespaces/);
 });
 
+test('rejects prefixed XML attributes even without namespace declarations', () => {
+  assert.throws(() => junitXmlToRecords('<testsuite name="s" xml:lang="en"><testcase name="a"/></testsuite>', 'r'), /namespaces/);
+  assert.throws(() => junitXmlToRecords('<testsuite name="s"><testcase name="a" x:meta="value"/></testsuite>', 'r'), /namespaces/);
+});
+
 test('normalizes run IDs for consistent multi-run analysis', () => {
   const records = junitXmlToRecords('<testsuite name="s"><testcase name="a"/></testsuite>', '  ci-42  ');
   assert.equal(records[0].runId, 'ci-42');
