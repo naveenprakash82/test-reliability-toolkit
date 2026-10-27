@@ -20,11 +20,15 @@ test('rejects report-level runtime errors even when other suites have assertions
 });
 
 test('rejects failed report with no assertion outcomes', () => {
-  assert.throws(() => jestJsonToRecords({ success: false, testResults: [] }, 'run-1'), /no assertion outcomes/i);
+  assert.throws(() => jestJsonToRecords({ success: false, testResults: [] }, 'run-1'), /no failed assertion outcomes/i);
 });
 
 test('preserves ordinary passing, failing and empty successful suites', () => {
   assert.deepEqual(jestJsonToRecords({ testResults: [suite()] }, 'run-1').map(r => r.outcome), ['passed']);
   assert.deepEqual(jestJsonToRecords({ testResults: [suite({ status: 'failed', assertionResults: [assertion('failed')] })] }, 'run-1').map(r => r.outcome), ['failed']);
   assert.deepEqual(jestJsonToRecords({ testResults: [] }, 'run-1'), []);
+});
+
+test('rejects report-level failure even if all recorded assertions passed', () => {
+  assert.throws(() => jestJsonToRecords({ success: false, testResults: [suite()] }, 'run-1'), /no failed assertion outcomes/i);
 });
