@@ -11,6 +11,12 @@ function jestJsonToRecords(report, runId) {
     throw new TypeError('Expected a Jest JSON report with testResults');
   }
 
+  // Suite-level execution errors cannot be represented as ordinary assertions.
+  // Reject these reports rather than silently undercounting failures.
+  if (Number.isFinite(report.numRuntimeErrorTestSuites) && report.numRuntimeErrorTestSuites > 0) {
+    throw new Error('Jest report contains suite runtime errors; assertion-only analysis would be incomplete');
+  }
+
   const records = [];
   const seen = new Set();
   const skippedStatuses = new Set(['pending', 'todo', 'disabled', 'skipped']);
@@ -18,6 +24,10 @@ function jestJsonToRecords(report, runId) {
     if (!suite || typeof suite.name !== 'string' || !suite.name.trim()
       || !Array.isArray(suite.assertionResults)) {
       throw new TypeError('Each test result needs a suite name and assertionResults');
+    }
+    if (suite.testExecError != null ||
+        (suite.status === 'failed' && !suite.assertionResults.some(assertion => assertion && assertion.status === 'failed'))) {
+      throw new Error('Jest suite failed outside recorded assertions: ' + suite.name);
     }
     for (const assertion of suite.assertionResults) {
       if (!assertion || typeof assertion.fullName !== 'string' || !assertion.fullName.trim()) {
@@ -37,6 +47,9 @@ function jestJsonToRecords(report, runId) {
       if (duration != null && outcome !== 'skipped') record.durationMs = duration;
       records.push(record);
     }
+  }
+  if (report.success === false && records.length === 0) {
+    throw new Error('Failed Jest report contains no assertion outcomes');
   }
   return records;
 }
