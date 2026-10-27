@@ -48,8 +48,8 @@ function jestJsonToRecords(report, runId) {
       records.push(record);
     }
   }
-  if (report.success === false && records.length === 0) {
-    throw new Error('Failed Jest report contains no assertion outcomes');
+  if (report.success === false && !records.some(record => record.outcome === 'failed')) {
+    throw new Error('Failed Jest report contains no failed assertion outcomes');
   }
   return records;
 }
