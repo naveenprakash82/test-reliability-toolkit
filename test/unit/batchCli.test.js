@@ -55,3 +55,25 @@ test('read and parse errors identify the file', () => {
   });
   assert.throws(() => buildSummary(['jest','ci-1','/nonexistent/report.json']), /Cannot read report \/nonexistent\/report\.json/);
 });
+
+test('rejects more than 100 runs before reading reports', () => {
+  const pairs = Array.from({ length: 101 }, (_, i) => ['ci-' + i, 'unused-' + i + '.json']).flat();
+  assert.throws(() => buildSummary(['jest', ...pairs]), /at most 100 runs/);
+});
+
+test('rejects non-file inputs and reports larger than 20 MiB', () => {
+  withFiles([report('passed')], ([a]) => {
+    assert.throws(() => buildSummary(['jest', 'ci-1', path.dirname(a)]), /not a regular file/);
+    fs.truncateSync(a, 20 * 1024 * 1024 + 1);
+    assert.throws(() => buildSummary(['jest', 'ci-1', a]), /20 MiB limit/);
+  });
+});
+
+test('rejects batches exceeding 32 MiB before reading the final report', () => {
+  withFiles([report('passed'), report('failed')], ([a, b]) => {
+    const padding = ' '.repeat(17 * 1024 * 1024);
+    fs.appendFileSync(a, padding);
+    fs.appendFileSync(b, padding);
+    assert.throws(() => buildSummary(['jest', 'ci-1', a, 'ci-2', b]), /32 MiB aggregate limit/);
+  });
+});
