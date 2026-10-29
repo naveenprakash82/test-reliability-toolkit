@@ -77,3 +77,30 @@ test('rejects batches exceeding 32 MiB before reading the final report', () => {
     assert.throws(() => buildSummary(['jest', 'ci-1', a, 'ci-2', b]), /32 MiB aggregate limit/);
   });
 });
+
+test('compares restricted JUnit XML reports across two runs', () => {
+  const xml = failed => '<testsuite name="cart" tests="1" failures="' + (failed ? 1 : 0) + '">' +
+    '<testcase classname="cart.spec" name="total">' + (failed ? '<failure/>' : '') +
+    '</testcase></testsuite>';
+  withFiles([xml(false), xml(true)], ([a, b]) => {
+    const summary = buildSummary(['junit', 'ci-1', a, 'ci-2', b]);
+    assert.equal(summary.length, 1);
+    assert.equal(summary[0].classification, 'mixed-outcomes');
+    assert.equal(summary[0].failureRate, 0.5);
+    assert.deepEqual(summary[0].missingRuns, []);
+  });
+});
+
+test('rejects unsafe JUnit XML and limits JUnit input before reading', () => {
+  withFiles(['<!DOCTYPE testsuite SYSTEM "file:///etc/passwd"><testsuite name="s"/>'], ([file]) => {
+    assert.throws(() => buildSummary(['junit', 'ci-1', file]), /DOCTYPE/);
+  });
+  withFiles(['<testsuite name="s"/>'], ([file]) => {
+    fs.truncateSync(file, 1024 * 1024 + 1);
+    assert.throws(() => buildSummary(['junit', 'ci-1', file]), /JUnit report exceeds 1 MiB limit/);
+  });
+});
+
+test('rejects unknown batch report formats before opening files', () => {
+  assert.throws(() => buildSummary(['unknown', 'ci-1', 'missing-file']), /Unsupported report format/);
+});
