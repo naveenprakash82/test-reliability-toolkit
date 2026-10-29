@@ -65,7 +65,7 @@ npm run analyze -- converted.json
 
 See the [JUnit XML format and safety guide](docs/junit-xml-adapter.md), [Playwright format guide](docs/playwright-json-adapter.md) and [Jest format guide](docs/jest-json-adapter.md). Conversions support only the documented fields and reporter structures. Do not assume compatibility with every version of either tool.
 
-To compare multiple runs, use `npm run analyze:batch -- jest ci-001 examples/sample-jest-results.json ci-002 examples/sample-jest-results-run2.json`. For Playwright, use `playwright` and Playwright JSON reports. See [batch analysis](docs/batch-analysis.md) for missing-run coverage and duplicate-report warnings.
+To compare multiple runs, use `npm run analyze:batch -- jest ci-001 examples/sample-jest-results.json ci-002 examples/sample-jest-results-run2.json`. For Playwright, use `playwright` and Playwright JSON reports. For restricted JUnit XML, use `npm run analyze:batch -- junit ci-001 examples/sample-junit-report.xml ci-002 examples/sample-junit-report-run2.xml`. See [batch analysis](docs/batch-analysis.md) for missing-run coverage and duplicate-report warnings.
 
 ## Tests
 
