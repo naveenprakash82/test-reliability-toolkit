@@ -26,6 +26,8 @@ jobs:
         run: npm run test:unit
       - name: Verify synthetic JUnit manifest example
         run: npm run analyze:manifest -- examples/junit-report-manifest.json
+      - name: Verify synthetic JUnit batch comparison
+        run: npm run analyze:batch -- junit ci-001 examples/sample-junit-report.xml ci-002 examples/sample-junit-report-run2.xml
       - name: Run browser tests
         run: npm test
         env:
