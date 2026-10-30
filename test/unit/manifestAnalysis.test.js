@@ -94,3 +94,18 @@ test('rejects a Jest manifest with a suite execution error rather than undercoun
     { runId: 'ci-02', file: 'second.json' }
   ])), /suite failed outside recorded assertions/);
 });
+
+test('rejects a non-regular manifest before attempting to read it', t => {
+  const f = setup(t);
+  assert.throws(() => analyzeManifest(f.root), /Manifest must be a regular file/);
+});
+
+test('rejects oversized JUnit XML reports before reading their contents', t => {
+  const f = setup(t);
+  fs.writeFileSync(path.join(f.root, 'large.xml'), ' '.repeat(1024 * 1024 + 1));
+  f.write('manifest.json', { format: 'junit', runs: [
+    { runId: 'ci-01', file: 'large.xml' }
+  ] });
+  assert.throws(() => analyzeManifest(path.join(f.root, 'manifest.json')),
+    /JUnit report exceeds 1 MiB limit/);
+});
