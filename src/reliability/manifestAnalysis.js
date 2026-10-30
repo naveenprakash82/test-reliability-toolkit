@@ -6,7 +6,9 @@ const { analyzeReportBatch } = require('./batchAnalysis');
 function analyzeManifest(file, warn = () => {}) {
   const manifestPath = fs.realpathSync(path.resolve(file));
   const base = path.dirname(manifestPath);
-  if (fs.statSync(manifestPath).size > 1024 * 1024) throw new Error('Manifest exceeds 1 MiB');
+  const manifestStat = fs.statSync(manifestPath);
+  if (!manifestStat.isFile()) throw new Error('Manifest must be a regular file');
+  if (manifestStat.size > 1024 * 1024) throw new Error('Manifest exceeds 1 MiB');
   const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
   if (!manifest || typeof manifest !== 'object' || Array.isArray(manifest) ||
       !['jest','playwright','junit'].includes(manifest.format) ||
@@ -33,6 +35,9 @@ function analyzeManifest(file, warn = () => {}) {
     seenPaths.add(reportPath);
     const stat = fs.statSync(reportPath);
     if (!stat.isFile() || stat.size > 20*1024*1024) throw new Error('Invalid report size or type: '+entry.file);
+    if (manifest.format === 'junit' && stat.size > 1024 * 1024) {
+      throw new Error('JUnit report exceeds 1 MiB limit: ' + entry.file);
+    }
     totalReportBytes += stat.size;
     if (totalReportBytes > MAX_TOTAL_REPORT_BYTES) {
       throw new Error('Manifest reports exceed 32 MiB aggregate limit');
