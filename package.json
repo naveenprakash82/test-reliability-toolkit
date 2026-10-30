@@ -11,17 +11,22 @@
     "check": "node scripts/check.js",
     "jest:convert": "node src/reliability/jestJsonCli.js",
     "playwright:convert": "node src/reliability/playwrightJsonCli.js",
+    "junit:convert": "node src/reliability/junitXmlCli.js",
     "prioritize": "node src/reliability/priorityCli.js",
     "analyze:batch": "node src/reliability/batchCli.js",
+    "analyze:manifest": "node src/reliability/manifestCli.js",
     "compare:priorities": "node src/reliability/comparePrioritiesCli.js"
   },
+  "dependencies": {
+    "saxes": "6.0.0"
+  },
   "devDependencies": {
-    "@wdio/cli": "^9.0.0",
-    "@wdio/local-runner": "^9.0.0",
-    "@wdio/mocha-framework": "^9.0.0",
-    "@wdio/spec-reporter": "^9.0.0"
+    "@wdio/cli": "^10.0.0",
+    "@wdio/local-runner": "^10.0.0",
+    "@wdio/mocha-framework": "^10.0.0",
+    "@wdio/spec-reporter": "^10.0.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22.19.0"
   }
 }

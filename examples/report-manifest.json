@@ -1,0 +1,7 @@
+{
+  "format": "jest",
+  "runs": [
+    { "runId": "ci-001", "file": "sample-jest-results.json" },
+    { "runId": "ci-002", "file": "sample-jest-results-run2.json" }
+  ]
+}

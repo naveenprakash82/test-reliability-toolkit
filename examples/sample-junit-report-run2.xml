@@ -1,0 +1,5 @@
+<testsuites><testsuite name="sample-cart" tests="3" failures="1" errors="0" skipped="1">
+  <testcase classname="cart.spec" name="adds an item" time="0.014"><failure message="synthetic mismatch">Expected item count 1, observed 0</failure></testcase>
+  <testcase classname="cart.spec" name="checks totals" time="0.018"/>
+  <testcase classname="cart.spec" name="optional feature"><skipped/></testcase>
+</testsuite></testsuites>

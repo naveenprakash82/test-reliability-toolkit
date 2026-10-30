@@ -17,8 +17,7 @@ Each suite must have a nonempty `name` and `assertionResults` array. Each assert
 
 ## Limitations and privacy
 
-This adapter does not import suite-level errors, stack traces, attachments, retries, or reporter metadata. An empty suite produces no records even when the suite failed. It cannot therefore establish that every failure in the original report was counted.
+This adapter imports assertion outcomes only. It rejects reports that indicate suite runtime errors, failed suites without failed assertions, or failed reports without failed assertion outcomes, rather than silently counting those executions as missing. It does not convert suite-level errors, stack traces, attachments, retries, or reporter metadata into individual test records. Reports with incomplete or unsupported failure information must be investigated using the original reporter output.
 
 Test names can contain internal file paths. Only publish synthetic or approved data. Do not commit confidential test reports, company source code, credentials, or customer information.
 
-This is a small interoperability example, not a claim of novel invention or independently established impact.
