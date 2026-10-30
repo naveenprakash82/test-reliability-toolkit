@@ -125,6 +125,10 @@ This project is maintained as the experimental Test Reliability Analysis Toolkit
 
 See the [getting started walkthrough](docs/GETTING_STARTED.md) for additional examples and troubleshooting.
 
+## Independent evaluation
+
+Follow the [external evaluator checklist](docs/EXTERNAL_EVALUATOR_CHECKLIST.md) for a clean installation, reproducible synthetic examples, evaluation questions, and safe feedback instructions.
+
 ## Contributing and releases
 
 Feedback, reproducible bug reports and focused test improvements are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before proposing changes.
