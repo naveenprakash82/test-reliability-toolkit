@@ -1,8 +1,8 @@
 {
-  "name": "web-test-reliability-examples",
+  "name": "test-reliability-toolkit",
   "version": "1.1.0",
   "private": true,
-  "description": "Browser automation and reproducible test reliability examples",
+  "description": "Experimental toolkit for analyzing repeated test results and prioritizing reliability investigations",
   "scripts": {
     "test": "wdio run ./wdio.conf.js",
     "test:smoke": "wdio run ./wdio.conf.js --mochaOpts.grep smoke",
