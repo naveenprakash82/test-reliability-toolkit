@@ -25,7 +25,7 @@ QA engineers, test infrastructure maintainers and CI owners with a small suite o
 - What would stop you using this in a real CI pipeline?
 - Would a stable command-line package or support for additional reporter variants make evaluation easier?
 
-Please file a [GitHub issue](https://github.com/naveenprakash82/Boilerplate-WebDriverio/issues/new) describing the behavior and a **synthetic reproduction**. Never attach employer-owned reports, screenshots, URLs, configuration or customer data.
+Please file a [GitHub issue](https://github.com/naveenprakash82/test-reliability-toolkit/issues/new) describing the behavior and a **synthetic reproduction**. Never attach employer-owned reports, screenshots, URLs, configuration or customer data.
 
 ## Known limitations
 

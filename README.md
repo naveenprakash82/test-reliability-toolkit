@@ -15,8 +15,8 @@ It supports a simple JSON test-history format and limited conversions from Jest,
 Requires Node.js 22.19.0 or later and npm. Chrome or Chromium is needed only for the browser examples.
 
 ```bash
-git clone https://github.com/naveenprakash82/Boilerplate-WebDriverio.git
-cd Boilerplate-WebDriverio
+git clone https://github.com/naveenprakash82/test-reliability-toolkit.git
+cd test-reliability-toolkit
 npm ci
 npm run test:unit
 npm run analyze -- examples/sample-runs.json
@@ -119,7 +119,7 @@ Run `npm run compare:priorities -- examples/sample-runs.json examples/sample-dep
 
 The next interoperability priorities are broader reporter compatibility, easier ingestion of repeated CI runs, and validation against future outcomes on a held-out dataset. Automated dependency discovery and historical storage are research/development tasks, not existing capabilities.
 
-The GitHub repository retains its original `Boilerplate-WebDriverio` name for now. Its current technical focus is test reliability analysis; a repository rename and package identity change need a separate compatibility review.
+This project is maintained as the experimental Test Reliability Analysis Toolkit. No npm package has been published.
 
 ## Usage walkthrough
 

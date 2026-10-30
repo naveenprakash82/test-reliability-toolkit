@@ -7,8 +7,8 @@ This experimental toolkit summarizes observed test outcomes across repeated loca
 Node.js 22.19.0 or later and npm. Chrome is only required for browser-spec execution.
 
 ```bash
-git clone https://github.com/naveenprakash82/Boilerplate-WebDriverio.git
-cd Boilerplate-WebDriverio
+git clone https://github.com/naveenprakash82/test-reliability-toolkit.git
+cd test-reliability-toolkit
 npm ci
 npm run check
 npm run test:unit
