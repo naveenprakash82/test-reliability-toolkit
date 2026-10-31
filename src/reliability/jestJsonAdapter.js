@@ -51,6 +51,23 @@ function jestJsonToRecords(report, runId) {
   if (report.success === false && !records.some(record => record.outcome === 'failed')) {
     throw new Error('Failed Jest report contains no failed assertion outcomes');
   }
+  // When Jest provides summary totals, reject partial assertion data rather than
+  // presenting an incomplete report as a successful run.
+  const observedCounts = {
+    numTotalTests: records.length,
+    numPassedTests: records.filter(record => record.outcome === 'passed').length,
+    numFailedTests: records.filter(record => record.outcome === 'failed').length
+  };
+  for (const [field, actual] of Object.entries(observedCounts)) {
+    if (report[field] === undefined) continue;
+    if (!Number.isSafeInteger(report[field]) || report[field] < 0) {
+      throw new TypeError('Invalid Jest ' + field + ' count');
+    }
+    if (report[field] !== actual) {
+      throw new Error('Jest ' + field + ' count ' + report[field] +
+        ' disagrees with recorded assertions ' + actual);
+    }
+  }
   return records;
 }
 
