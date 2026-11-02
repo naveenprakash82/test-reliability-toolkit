@@ -32,3 +32,26 @@ test('preserves ordinary passing, failing and empty successful suites', () => {
 test('rejects report-level failure even if all recorded assertions passed', () => {
   assert.throws(() => jestJsonToRecords({ success: false, testResults: [suite()] }, 'run-1'), /no failed assertion outcomes/i);
 });
+
+
+test('rejects report summary totals that disagree with parsed assertions', () => {
+  const report = { testResults: [suite()] };
+  assert.throws(() => jestJsonToRecords({ ...report, numFailedTests: 1 }, 'r'), /numFailedTests count/);
+  assert.throws(() => jestJsonToRecords({ ...report, numPassedTests: 2 }, 'r'), /numPassedTests count/);
+  assert.throws(() => jestJsonToRecords({ ...report, numTotalTests: 2 }, 'r'), /numTotalTests count/);
+});
+
+test('accepts consistent Jest summary totals and optional missing fields', () => {
+  const report = { testResults: [suite({ assertionResults: [assertion('passed'),
+    { fullName: 'fails', status: 'failed' }, { fullName: 'pending', status: 'pending' }] })],
+    numTotalTests: 3, numPassedTests: 1, numFailedTests: 1 };
+  assert.deepEqual(jestJsonToRecords(report, 'r').map(record => record.outcome),
+    ['passed', 'failed', 'skipped']);
+});
+
+test('rejects malformed Jest summary totals', () => {
+  for (const value of [-1, 1.5, '1', null, Number.MAX_SAFE_INTEGER + 1]) {
+    assert.throws(() => jestJsonToRecords({ testResults: [suite()], numTotalTests: value }, 'r'),
+      /Invalid Jest numTotalTests/);
+  }
+});
