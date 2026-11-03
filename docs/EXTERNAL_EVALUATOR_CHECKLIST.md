@@ -55,6 +55,6 @@ Do not publish employer-owned test reports, internal architecture, credentials, 
 - Jest and Playwright JSON converters and JUnit XML conversion support documented subsets only.
 - Manifest processing reads local report files; it does not fetch CI artifacts, verify run provenance, or maintain historical storage.
 - Dependency mappings are manually supplied. Rankings are heuristic, not calibrated probabilities.
-- No npm package is published, and no production readiness, independent adoption, or predictive improvement is claimed.
+- No npm package is published. The examples do not establish predictive improvement or compatibility with all reporter versions.
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) and [SECURITY.md](../SECURITY.md) before sharing findings.
