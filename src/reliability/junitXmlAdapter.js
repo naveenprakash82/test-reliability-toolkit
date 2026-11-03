@@ -29,6 +29,16 @@ function junitXmlToRecords(xml, runId) {
 
   parser.on('doctype', () => { throw new Error('JUnit XML DOCTYPE is not supported'); });
   parser.on('processinginstruction', () => { throw new Error('JUnit XML processing instructions are not supported'); });
+  // Ignore formatting whitespace but reject unmodeled data in structural nodes.
+  function checkStructuralText(value) {
+    const current = stack[stack.length - 1];
+    if (current && ['testsuites', 'testsuite', 'testcase', 'properties'].includes(current.name) &&
+        value.trim()) {
+      throw new Error('Unexpected JUnit XML text inside ' + current.name);
+    }
+  }
+  parser.on('text', checkStructuralText);
+  parser.on('cdata', checkStructuralText);
   parser.on('opentag', tag => {
     const name = tag.name;
     const attrs = tag.attributes;
