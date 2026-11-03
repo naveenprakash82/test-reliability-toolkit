@@ -94,3 +94,24 @@ test('validates testcase duration even when the testcase is skipped', () => {
   assert.throws(() => junitXmlToRecords('<testsuite name="s"><testcase name="a" time="NaN"><skipped/></testcase></testsuite>', 'r'), /time/);
   assert.throws(() => junitXmlToRecords('<testsuite name="s"><testcase name="a" time="-1"><skipped/></testcase></testsuite>', 'r'), /time/);
 });
+
+test('rejects unexpected text and CDATA in structural JUnit nodes', () => {
+  assert.throws(() => junitXmlToRecords(
+    '<testsuites>unexpected<testsuite name="s"/></testsuites>', 'r'), /text inside testsuites/);
+  assert.throws(() => junitXmlToRecords(
+    '<testsuite name="s">unexpected<testcase name="a"/></testsuite>', 'r'), /text inside testsuite/);
+  assert.throws(() => junitXmlToRecords(
+    '<testsuite name="s"><testcase name="a"><![CDATA[unexpected]]></testcase></testsuite>', 'r'),
+    /text inside testcase/);
+  assert.throws(() => junitXmlToRecords(
+    '<testsuite name="s"><properties>unexpected</properties></testsuite>', 'r'), /text inside properties/);
+});
+
+test('permits formatting whitespace and diagnostic text inside supported JUnit nodes', () => {
+  const xml = '<testsuite name="s" tests="2" failures="1">\n' +
+    '  <properties><property name="owner" value="qa"/></properties>\n' +
+    '  <testcase name="a"><system-out><![CDATA[diagnostic output]]></system-out></testcase>\n' +
+    '  <testcase name="b"><failure><![CDATA[expected failure details]]></failure></testcase>\n' +
+    '</testsuite>';
+  assert.deepEqual(junitXmlToRecords(xml, 'r').map(record => record.outcome), ['passed', 'failed']);
+});

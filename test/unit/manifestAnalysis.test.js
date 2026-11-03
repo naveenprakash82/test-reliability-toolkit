@@ -109,3 +109,17 @@ test('rejects oversized JUnit XML reports before reading their contents', t => {
   assert.throws(() => analyzeManifest(path.join(f.root, 'manifest.json')),
     /JUnit report exceeds 1 MiB limit/);
 });
+
+test('rejects unexpected structural JUnit XML text during multi-run ingestion', t => {
+  const f = setup(t);
+  fs.writeFileSync(path.join(f.root, 'bad.xml'),
+    '<testsuite name="checkout">unexpected<testcase name="total"/></testsuite>');
+  fs.writeFileSync(path.join(f.root, 'good.xml'),
+    '<testsuite name="checkout"><testcase name="total"/></testsuite>');
+  f.write('manifest.json', { format: 'junit', runs: [
+    { runId: 'ci-01', file: 'good.xml' },
+    { runId: 'ci-02', file: 'bad.xml' }
+  ] });
+  assert.throws(() => analyzeManifest(path.join(f.root, 'manifest.json')),
+    /Unexpected JUnit XML text inside testsuite/);
+});
