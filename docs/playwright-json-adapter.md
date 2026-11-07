@@ -25,7 +25,7 @@ A unique run identifier must be provided for each execution. To compare repeated
 
 The adapter walks nested `suites`, `specs` and `tests` in the Playwright JSON report. Test identifiers include the file or suite name, test title and project name. It maps `passed` to passed, `failed`, `timedOut` and `interrupted` to failed, and `skipped` to skipped.
 
-If a test has retries, only its **last attempt** is included. An earlier failed attempt followed by a successful retry therefore appears as a pass. This tool does not measure retry-level flakiness or infer why a test failed.
+Each test contributes one execution using its final attempt's outcome. The converter also records `attemptCount`, `retryCount`, and `flaky`. A failed, timed-out, or interrupted attempt followed by a final pass sets `flaky: true`; all attempt statuses are validated. Playwright's `flaky` status must be consistent with the attempt sequence. Retry metadata is not counted as separate runs. The analyzer reports `flakyPasses`, total `retryCount`, and `observedInstability` separately from its cross-run `classification` and `failureRate`. These observations do not establish the cause of instability. Jest and Surefire retry markers are not yet supported.
 
 This example intentionally excludes attachments, screenshots, errors, stdout and stderr. It does not count suite-level failures with no test results. The test fixtures are invented and do not represent a production system.
 
