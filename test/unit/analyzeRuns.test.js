@@ -96,3 +96,20 @@ test('reports no duration coverage when there are no executions', () => {
   assert.equal(result.durationCoverage, null);
   assert.equal(result.averageDurationMs, null);
 });
+
+test('counts retry-flaky passes as observed instability', () => {
+  const result = analyzeRuns([
+    { testId: 'login', runId: '1', outcome: 'passed', flaky: true, attemptCount: 2, retryCount: 1 },
+    { testId: 'login', runId: '2', outcome: 'passed', flaky: false, attemptCount: 1, retryCount: 0 }
+  ])[0];
+  assert.equal(result.classification, 'consistently-passing');
+  assert.equal(result.flakyPasses, 1);
+  assert.equal(result.retryCount, 1);
+  assert.equal(result.observedInstability, true);
+  assert.equal(result.failureRate, 0);
+});
+test('rejects invalid retry metadata', () => {
+  assert.throws(() => analyzeRuns([{ testId: 'a', runId: '1', outcome: 'failed', flaky: true }]), /flaky requires/);
+  assert.throws(() => analyzeRuns([{ testId: 'a', runId: '1', outcome: 'passed', retryCount: -1 }]), /retryCount/);
+  assert.throws(() => analyzeRuns([{ testId: 'a', runId: '1', outcome: 'passed', attemptCount: 2, retryCount: 0 }]), /Inconsistent/);
+});

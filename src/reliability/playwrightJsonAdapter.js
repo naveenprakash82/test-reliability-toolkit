@@ -1,7 +1,7 @@
 /**
  * Convert Playwright's built-in JSON reporter output to analyzeRuns records.
- * This adapter treats the final retry as the execution outcome. Earlier
- * attempts are not counted as independent runs.
+ * The final attempt determines the outcome. Retry attempts remain within
+ * one execution, with explicit metadata for failed-then-passed tests.
  */
 function playwrightJsonToRecords(report, runId) {
   if (typeof runId !== 'string' || !runId.trim()) throw new TypeError('runId must be a nonempty string');
@@ -26,13 +26,23 @@ function playwrightJsonToRecords(report, runId) {
         const id = [spec.file || suite.file || '', ...nextTitles, spec.title, test.projectName].join(' :: ');
         if (seen.has(id)) throw new Error('Duplicate test identifier in report: ' + id);
         seen.add(id);
+        for (const attempt of test.results) {
+          if (!attempt || !['passed', 'failed', 'timedOut', 'interrupted', 'skipped'].includes(attempt.status)) {
+            throw new TypeError('Unsupported Playwright attempt status: ' + String(attempt?.status));
+          }
+        }
         const final = test.results.at(-1);
         const status = final ? final.status : test.status;
         const outcome = status === 'passed' ? 'passed'
           : ['failed', 'timedOut', 'interrupted'].includes(status) ? 'failed'
           : status === 'skipped' ? 'skipped' : null;
         if (!outcome) throw new TypeError('Unsupported Playwright status: ' + String(status));
-        const record = { testId: id, runId, outcome };
+        const failedAttempt = test.results.some(attempt => ['failed', 'timedOut', 'interrupted'].includes(attempt.status));
+        const flaky = outcome === 'passed' && failedAttempt;
+        if (test.status === 'flaky' && !flaky) {
+          throw new TypeError('Playwright flaky status requires a failed attempt followed by a pass');
+        }
+        const record = { testId: id, runId, outcome, attemptCount: test.results.length, retryCount: Math.max(0, test.results.length - 1), flaky };
         if (outcome !== 'skipped' && final && final.duration != null) {
           if (!Number.isFinite(final.duration) || final.duration < 0) throw new TypeError('Invalid test duration');
           record.durationMs = final.duration;
