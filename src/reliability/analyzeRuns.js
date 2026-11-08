@@ -16,7 +16,7 @@ function analyzeRuns(records) {
     if (!record || typeof record !== 'object' || Array.isArray(record)) {
       throw new TypeError('Each test result must be an object');
     }
-    const { testId, runId, outcome, durationMs } = record;
+    const { testId, runId, outcome, durationMs, flaky, attemptCount, retryCount } = record;
     if (typeof testId !== 'string' || !testId.trim()
       || typeof runId !== 'string' || !runId.trim()) {
       throw new TypeError('Each result requires a nonempty testId and runId');
@@ -28,14 +28,22 @@ function analyzeRuns(records) {
       throw new TypeError('durationMs must be a nonnegative finite number');
     }
 
+    if (flaky !== undefined && typeof flaky !== 'boolean') throw new TypeError('flaky must be a boolean');
+    if (attemptCount !== undefined && (!Number.isSafeInteger(attemptCount) || attemptCount < 0)) throw new TypeError('attemptCount must be a nonnegative integer');
+    if (retryCount !== undefined && (!Number.isSafeInteger(retryCount) || retryCount < 0)) throw new TypeError('retryCount must be a nonnegative integer');
+    if (attemptCount !== undefined && retryCount !== undefined && retryCount !== Math.max(0, attemptCount - 1)) throw new TypeError('Inconsistent attemptCount and retryCount');
+    if (flaky === true && (outcome !== 'passed' || (attemptCount !== undefined && attemptCount < 2))) throw new TypeError('flaky requires a passing execution with retries');
+
     const key = JSON.stringify([testId, runId]);
     if (seen.has(key)) throw new Error('Duplicate testId and runId: ' + key);
     seen.add(key);
     if (!groups.has(testId)) {
-      groups.set(testId, { testId, passed: 0, failed: 0, skipped: 0, durations: [] });
+      groups.set(testId, { testId, passed: 0, failed: 0, skipped: 0, durations: [], flakyPasses: 0, retryCount: 0 });
     }
     const group = groups.get(testId);
     group[outcome]++;
+    if (flaky === true) group.flakyPasses++;
+    if (retryCount !== undefined) group.retryCount += retryCount;
     if (outcome !== 'skipped' && durationMs !== undefined) group.durations.push(durationMs);
   }
 
@@ -59,6 +67,9 @@ function analyzeRuns(records) {
       skipped: group.skipped,
       executed,
       failureRate,
+      flakyPasses: group.flakyPasses,
+      retryCount: group.retryCount,
+      observedInstability: classification === 'mixed-outcomes' || group.flakyPasses > 0,
       classification,
       averageDurationMs,
       durationSampleCount,

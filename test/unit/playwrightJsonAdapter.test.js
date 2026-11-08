@@ -52,3 +52,20 @@ test('rejects unknown statuses and invalid duration', () => {
 test('returns empty input without synthetic test results', () => {
   assert.deepEqual(playwrightJsonToRecords({suites:[]}, 'r'), []);
 });
+
+test('preserves retry-aware instability without inflating run count', () => {
+  const rows = playwrightJsonToRecords(report, 'r');
+  const retry = rows.find(row => row.testId.includes('handles retries'));
+  assert.equal(retry.flaky, true);
+  assert.equal(retry.attemptCount, 2);
+  assert.equal(retry.retryCount, 1);
+  assert.equal(rows.find(row => row.testId.includes('accepts user') && row.testId.includes('chromium')).flaky, false);
+});
+test('rejects malformed earlier attempts and inconsistent flaky status', () => {
+  const broken = structuredClone(report);
+  broken.suites[0].suites[0].specs[1].tests[0].results[0].status = 'unknown';
+  assert.throws(() => playwrightJsonToRecords(broken, 'r'), /attempt status/);
+  const mismatch = structuredClone(report);
+  mismatch.suites[0].suites[0].specs[0].tests[0].status = 'flaky';
+  assert.throws(() => playwrightJsonToRecords(mismatch, 'r'), /flaky status/);
+});
