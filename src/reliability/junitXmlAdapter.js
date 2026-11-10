@@ -55,7 +55,7 @@ function junitXmlToRecords(xml, runId) {
       const allowed = {
         testsuites: ['testsuite'],
         testsuite: ['testcase', 'properties', 'system-out', 'system-err'],
-        testcase: ['failure', 'error', 'skipped', 'system-out', 'system-err'],
+        testcase: ['failure', 'error', 'skipped', 'flakyFailure', 'system-out', 'system-err'],
         properties: ['property']
       };
       if (!(allowed[parent.name] || []).includes(name)) {
@@ -75,9 +75,15 @@ function junitXmlToRecords(xml, runId) {
       required(attrs.name, 'testcase name');
       if (attrs.classname !== undefined) required(attrs.classname, 'testcase classname');
       entry.marker = null;
+      entry.flakyFailures = 0;
       entry.suite = parent;
     }
+    if (name === 'flakyFailure') {
+      if (parent.marker !== null) throw new Error('Conflicting JUnit testcase outcome markers');
+      parent.flakyFailures++;
+    }
     if (['failure', 'error', 'skipped'].includes(name)) {
+      if (parent.flakyFailures) throw new Error('Conflicting JUnit testcase outcome markers');
       if (parent.marker !== null) throw new Error('Conflicting JUnit testcase outcome markers');
       parent.marker = name;
     }
@@ -97,6 +103,11 @@ function junitXmlToRecords(xml, runId) {
       const outcome = entry.marker === 'failure' || entry.marker === 'error' ? 'failed'
         : entry.marker === 'skipped' ? 'skipped' : 'passed';
       const record = { testId: id, runId: normalizedRunId, outcome };
+      if (entry.flakyFailures) {
+        record.flaky = true;
+        record.attemptCount = entry.flakyFailures + 1;
+        record.retryCount = entry.flakyFailures;
+      }
       if (entry.attrs.time !== undefined) {
         const raw = entry.attrs.time;
         if (!/^[0-9]+(?:\.[0-9]+)?$/.test(raw)) throw new TypeError('Invalid JUnit testcase time');

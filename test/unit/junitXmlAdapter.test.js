@@ -115,3 +115,35 @@ test('permits formatting whitespace and diagnostic text inside supported JUnit n
     '</testsuite>';
   assert.deepEqual(junitXmlToRecords(xml, 'r').map(record => record.outcome), ['passed', 'failed']);
 });
+
+
+test('preserves Surefire flakyFailure attempts as a single flaky pass', () => {
+  const xml = '<testsuite name="checkout" tests="1" failures="0">' +
+    '<testcase name="payment"><flakyFailure message="first attempt"/>' +
+    '<flakyFailure message="second attempt"/></testcase></testsuite>';
+  const records = junitXmlToRecords(xml, 'ci-1');
+  assert.deepEqual(records, [{
+    testId: 'checkout :: checkout :: payment', runId: 'ci-1',
+    outcome: 'passed', flaky: true, attemptCount: 3, retryCount: 2
+  }]);
+  const summary = analyzeRuns(records)[0];
+  assert.equal(summary.flakyPasses, 1);
+  assert.equal(summary.retryCount, 2);
+  assert.equal(summary.executed, 1);
+  assert.equal(summary.observedInstability, true);
+});
+
+test('rejects conflicting Surefire retry and terminal markers', () => {
+  assert.throws(() => junitXmlToRecords(
+    '<testsuite name="s"><testcase name="a"><flakyFailure/><failure/></testcase></testsuite>', 'r'),
+  /Conflicting/);
+  assert.throws(() => junitXmlToRecords(
+    '<testsuite name="s"><testcase name="a"><skipped/><flakyFailure/></testcase></testsuite>', 'r'),
+  /Conflicting/);
+});
+
+test('does not silently accept unsupported Surefire rerunFailure elements', () => {
+  assert.throws(() => junitXmlToRecords(
+    '<testsuite name="s"><testcase name="a"><rerunFailure/></testcase></testsuite>', 'r'),
+  /Unsupported/);
+});
