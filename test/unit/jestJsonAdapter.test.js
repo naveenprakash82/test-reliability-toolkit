@@ -58,3 +58,36 @@ test('converted results are accepted by the existing reliability analyzer', () =
   assert.equal(failed.failed, 1);
   assert.equal(failed.failureRate, 1);
 });
+
+test('rejects retry evidence rather than treating a retried Jest pass as clean', () => {
+  const base = { testResults: [{ name: 'spec', assertionResults: [
+    { fullName: 'retried', status: 'passed', invocations: 2, retryReasons: ['initial failure'] }
+  ] }] };
+  assert.throws(() => jestJsonToRecords(base, 'r'), /retry evidence/);
+  const reasonsOnly = structuredClone(base);
+  delete reasonsOnly.testResults[0].assertionResults[0].invocations;
+  assert.throws(() => jestJsonToRecords(reasonsOnly, 'r'), /retry evidence/);
+  const invocationsOnly = structuredClone(base);
+  delete invocationsOnly.testResults[0].assertionResults[0].retryReasons;
+  assert.throws(() => jestJsonToRecords(invocationsOnly, 'r'), /retry evidence/);
+});
+
+test('accepts single Jest invocation and empty retry reasons', () => {
+  const report = { testResults: [{ name: 'spec', assertionResults: [
+    { fullName: 'clean', status: 'passed', invocations: 1, retryReasons: [] }
+  ] }] };
+  assert.equal(jestJsonToRecords(report, 'r')[0].outcome, 'passed');
+});
+
+test('rejects malformed Jest retry metadata', () => {
+  for (const invocations of [-1, 1.5, '2']) {
+    const report = { testResults: [{ name: 'spec', assertionResults: [
+      { fullName: 'x', status: 'passed', invocations }
+    ] }] };
+    assert.throws(() => jestJsonToRecords(report, 'r'), /invocations/);
+  }
+  const report = { testResults: [{ name: 'spec', assertionResults: [
+    { fullName: 'x', status: 'passed', retryReasons: 'error' }
+  ] }] };
+  assert.throws(() => jestJsonToRecords(report, 'r'), /retryReasons/);
+});
