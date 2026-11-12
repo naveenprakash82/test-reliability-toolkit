@@ -33,6 +33,19 @@ function jestJsonToRecords(report, runId) {
       if (!assertion || typeof assertion.fullName !== 'string' || !assertion.fullName.trim()) {
         throw new TypeError('Each assertion needs a nonempty fullName');
       }
+      // Retry metadata must not be silently converted into a clean pass.
+      // This adapter does not yet model Jest retry attempt outcomes.
+      if (assertion.invocations !== undefined &&
+          (!Number.isSafeInteger(assertion.invocations) || assertion.invocations < 0)) {
+        throw new TypeError('Invalid Jest assertion invocations');
+      }
+      if (assertion.retryReasons !== undefined && !Array.isArray(assertion.retryReasons)) {
+        throw new TypeError('Invalid Jest assertion retryReasons');
+      }
+      if ((assertion.invocations !== undefined && assertion.invocations > 1) ||
+          (assertion.retryReasons !== undefined && assertion.retryReasons.length > 0)) {
+        throw new Error('Jest assertion retry evidence is not supported: ' + assertion.fullName);
+      }
       const { status, duration } = assertion;
       const outcome = status === 'passed' || status === 'failed'
         ? status : skippedStatuses.has(status) ? 'skipped' : null;
